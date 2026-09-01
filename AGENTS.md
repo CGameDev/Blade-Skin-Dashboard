@@ -19,12 +19,13 @@ Before changing UI, navigation, architecture, Marketplace behavior, build toolin
 1. `README.md`
 2. `docs/WORKING_SKIN_BASELINE.md`
 3. `docs/MILESTONE_000_WORKING_SKIN_STANDALONE_TRANSPOSE.md`
-4. `docs/FIDELITY_DIRECTIVE.md`
-5. `docs/CODEX_EXECUTION_RULES.md`
-6. `docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md`
-7. `docs/REFERENCE_MATRIX.md`
+4. `docs/SHARED_CORE_ARCHITECTURE.md`
+5. `docs/FIDELITY_DIRECTIVE.md`
+6. `docs/CODEX_EXECUTION_RULES.md`
+7. `docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md`
+8. `docs/REFERENCE_MATRIX.md`
 
-`WORKING_SKIN_BASELINE.md` and Milestone 000 take precedence over older from-scratch implementation sequencing.
+`WORKING_SKIN_BASELINE.md`, Milestone 000 and `SHARED_CORE_ARCHITECTURE.md` take precedence over older from-scratch implementation sequencing.
 
 ## Canonical implementation seed
 
@@ -66,7 +67,12 @@ The historical archive validates fidelity. It is no longer the first place Codex
 - Do not add creative design changes.
 - Do not use Metro/NXE visual language.
 - Do not reuse CCLOS visual components.
-- Do reuse CCLOS backend/service logic behind Blade adapters when useful.
+- Do reuse CCLOS/ConsoleCrate backend/service logic behind Blade adapters when useful.
+- Do not call CCLOS presentation screens, widgets, navigation classes or view models from Blade code.
+- Do not require CCLOS to be running for Blade to function.
+- Prefer shared service interfaces such as LibraryService, MarketplaceService, DownloadService, TitleUpdateService and LaunchService over presentation-specific integration.
+- When reusable backend code is proven independent of CCLOS presentation, progressively extract it into a neutral shared core rather than duplicating it.
+- Do not perform a speculative large shared-core refactor before the standalone Blade proof-of-architecture succeeds.
 - Do not depend on Aurora or Freestyle Dash at runtime.
 - Do not replace working geometry, timelines, animations, focus states or audio without a documented technical/fidelity reason.
 - Do not create generic colored Blade panels when the approved skin already supplies the Blade presentation.
@@ -90,6 +96,30 @@ For any state already implemented in the approved `BladeDash(2005)` package:
 
 Do not redraw first and wire backend later.
 
+## Shared-core rule
+
+The canonical architecture is:
+
+```text
+Approved Blade XUI/XUR frontend
+        |
+FSD compatibility facade
+        |
+Blade presentation models
+        |
+Blade adapters
+        |
+Shared ConsoleCrate/CCLOS-derived services
+        |
+Xbox 360 platform APIs
+```
+
+The guiding principle is:
+
+**BladeDash supplies the face. ConsoleCrate/CCLOS supplies proven infrastructure. The standalone Blade XEX owns the runtime.**
+
+See `docs/SHARED_CORE_ARCHITECTURE.md` for the mandatory service boundaries and prohibited coupling patterns.
+
 ## Host-replacement architecture
 
 Maintain separation:
@@ -103,7 +133,7 @@ Blade presentation models
         |
 Blade adapters
         |
-Standalone services / CCLOS backend logic / Xbox 360 platform APIs
+Standalone services / shared ConsoleCrate services / Xbox 360 platform APIs
 ```
 
 The UI must not bind directly to CCLOS screen/widget implementations.
@@ -120,7 +150,7 @@ Map modern catalog/download data into the existing Blade presentation contract. 
 
 The final application must be an independent Xbox 360 dashboard XEX.
 
-Do not require Aurora or Freestyle Dash for rendering, data, navigation, launching, Marketplace behavior, settings, game lists or profile/system information.
+Do not require Aurora, Freestyle Dash or the CCLOS application for rendering, data, navigation, launching, Marketplace behavior, settings, game lists or profile/system information.
 
 The standalone XEX replaces the old host, not the Blade presentation.
 
@@ -224,4 +254,4 @@ For states present in the approved working skin, success means the standalone ho
 
 ## Final instruction
 
-**Do not rebuild what already works. Transpose the approved Blade skin onto a standalone host and replace the missing FSD runtime behind it.**
+**Do not rebuild what already works. Preserve the approved Blade frontend, reuse the proven ConsoleCrate/CCLOS service infrastructure behind clean adapters, and replace the missing FSD runtime with a standalone host.**
