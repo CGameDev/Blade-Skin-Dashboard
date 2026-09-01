@@ -2,15 +2,19 @@
 
 ## Status
 
-**Canonical implementation seed for the standalone Blade dashboard.**
+**Canonical implementation seed and absolute visual/behavioral authority for the standalone Blade dashboard.**
 
-This document changes the implementation strategy of this repository. The dashboard is no longer to be recreated from scratch when the developer-verified working `BladeDash(2005)` skin already provides the corresponding UI, animation, navigation resource, audio, geometry, or presentation state.
+The developer-verified working `BladeDash(2005)` skin is not merely a reference or starting point. It is the approved product frontend.
 
-The historical Retail 2.0.6770 dashboard remains the **fidelity validation target**, but the working skin is now the **primary implementation starting point**. If older repository guidance conflicts with this rule, this document wins for implementation strategy.
+When this package defines a UI state, geometry, animation, navigation behavior, focus state, dialog, sound event, transition, menu hierarchy, loading presentation, or other visual/behavioral detail, **BladeDash(2005) wins**.
+
+Retail Xbox 360 Blades build 2.0.6770 is supplemental historical evidence only and may be used when the approved package does not adequately define the required state or behavior.
+
+See `docs/AUTHORITY_HIERARCHY.md`.
 
 ## Developer-verified source package
 
-Expected developer-local path:
+Expected local path:
 
 ```text
 references/local/BladeDash(2005).zip
@@ -21,8 +25,6 @@ Expected extraction path:
 ```text
 references/local/BladeDash(2005)/
 ```
-
-These paths are intentionally under `references/local/`, which is excluded from Git.
 
 Verified package fingerprint:
 
@@ -58,7 +60,7 @@ Important resource counts:
 1   .wmv
 ```
 
-This is an already-authored XUI presentation implementation, not a screenshot/reference pack.
+This is an already-authored and working XUI presentation implementation, not a screenshot/reference pack.
 
 ### Key files
 
@@ -68,7 +70,7 @@ This is an already-authored XUI presentation implementation, not a screenshot/re
 - 277,528 lines
 - XUI canvas version `000c`
 - 448 direct top-level resources/visuals
-- includes Blade geometry, highlights, jewels, bend/straight blade states, labels, list controls, loading visuals, timeline animation data, sound triggers, panels and dialogs
+- includes Blade geometry, highlights, jewels, bend/straight states, labels, list controls, loading visuals, animation timelines, sound triggers, panels, and dialogs
 - SHA-256: `d79715c0e36b08baa6fa09a5db2b5c8d7d3c193df0b159096d6476c296796fd1`
 
 `skin.xml`
@@ -98,15 +100,32 @@ This is an already-authored XUI presentation implementation, not a screenshot/re
 
 ## Existing compiled scene set
 
-The package already contains scene resources for major dashboard functions, including `main.xur`, `SplashScreen.xur`, `Achievements.xur`, `avatar.xur`, game-list variants, `gameinfo.xur`, `GameControls.xur`, `savedgames.xur`, `TitleUpdateManager.xur`, `Trainers.xur`, `CopyDVD.xur`, file-manager scenes, path-manager scenes, settings scenes, weather, music, utilities, updater and other support scenes.
+The package already contains major dashboard scenes including:
 
-Codex must inventory and reuse these resources before creating replacement scenes.
+- `main.xur`
+- `SplashScreen.xur`
+- `Achievements.xur`
+- `avatar.xur`
+- game-list variants
+- `gameinfo.xur`
+- `GameControls.xur`
+- `savedgames.xur`
+- `TitleUpdateManager.xur`
+- `Trainers.xur`
+- `CopyDVD.xur`
+- file/path manager scenes
+- settings scenes
+- weather
+- music/video
+- utilities/updater/support scenes
+
+Codex must inventory and reuse these resources before creating replacements.
 
 ## FSD host contracts visible in the skin
 
-The package does not contain the Freestyle Dash executable/source code. Therefore the standalone XEX must replace the FSD runtime behind the UI.
+The package does not contain the Freestyle Dash executable/source. The standalone XEX must therefore replace the FSD runtime behind the approved UI.
 
-The skin configuration exposes useful contract boundaries such as:
+The skin exposes host-facing concepts such as:
 
 - `CoverFlow`
 - `VideoManager`
@@ -126,58 +145,50 @@ The skin configuration exposes useful contract boundaries such as:
 - `ScnTeamFSD`
 - `ScnWeather`
 
-Do not redesign the UI to avoid these contracts. Implement a compatibility layer behind the existing UI.
+Do not redesign the frontend to avoid these contracts. Implement compatibility facades behind the existing UI.
 
 ## Target architecture
 
 ```text
 BladeDash(2005) XUI/XUR/resources
               |
-              v
-Blade presentation compatibility layer
+Blade/FSD compatibility facade
               |
-              v
+Blade presentation models
+              |
 Blade-specific adapters
               |
-   +----------+----------+----------+
-   |          |          |          |
- Library  Marketplace Profiles  System/Storage
- Launch   Downloads   Achievements Network/Settings
-   \          |          |          /
-    +---------+----------+---------+
-              |
-              v
-CCLOS/ConsoleCrate backend logic
+Shared ConsoleCrate/CCLOS-derived backend services
 + Xbox 360/XDK platform services
               |
-              v
 Standalone BladeDashboard.xex
 ```
 
-**Reuse CCLOS backend capability, not CCLOS visual components.**
+**Reuse CCLOS/ConsoleCrate backend capability, not CCLOS visual components.**
 
-## Reuse first
+## Frontend preservation rule
 
-Codex should preserve wherever technically possible:
+Preserve wherever technically possible:
 
-- Blade geometry and XUI visual definitions;
-- scene resources that already load correctly;
+- Blade geometry and XUI definitions;
+- scene hierarchy/resources;
 - focus/highlight states;
+- controller navigation behavior;
 - transitions/timelines;
 - button/list visuals;
-- audio cues;
-- backgrounds, jewels and separators;
-- image/texture resources;
+- audio cues and event timing;
+- backgrounds, jewels, separators, textures;
 - menu geometry and controller glyphs;
 - loading visuals and dialogs;
-- coverflow meshes/shaders where usable;
-- existing visual configuration XML.
+- CoverFlow meshes/shaders where retained;
+- visual configuration XML;
+- approved quirks/inconsistencies.
 
-Do not replace working UI merely because newly written code would be cleaner.
+Do not replace working UI because newly written code would be cleaner or because Retail 6770 differs.
 
 ## Newly implemented/adapted runtime
 
-The standalone product still needs owned code for:
+The standalone product needs owned/shared code for:
 
 - XEX entry/lifecycle;
 - XUI initialization/resource loading;
@@ -189,53 +200,87 @@ The standalone product still needs owned code for:
 - settings persistence;
 - background work/tasking;
 - HTTP/network capability;
-- ConsoleCrate Marketplace and download adapters;
-- Title Update integration where retained;
+- ConsoleCrate Marketplace/download adapters;
+- Title Update integration;
 - cache/artwork lookup;
-- logging, diagnostics and error handling.
+- logging, diagnostics, and error handling.
 
-Where CCLOS already has a proven backend implementation, port/reuse the backend logic through a Blade-specific adapter instead of rebuilding the same subsystem.
+Where ConsoleCrate/CCLOS already has a proven backend implementation, reuse/port it through a Blade-specific adapter instead of rebuilding the same subsystem.
 
 ## XuiTool rule
 
-The owner has verified that the supplied skin is editable in XuiTool. Codex must inspect the actual developer-local XDK/XuiTool environment and test this real package before assuming a resource needs to be recreated.
+The owner has verified that this skin is editable in XuiTool. Codex must inspect the developer-local XDK/XuiTool environment and test this real package before assuming a resource needs recreation.
 
 Required first checks:
 
-1. locate `references/local/BladeDash(2005).zip`;
+1. locate the approved ZIP;
 2. verify SHA-256;
 3. extract without changing directory structure;
 4. preserve an untouched golden copy;
 5. locate `skin.xui` and `main.xur`;
 6. open/test the package with the installed XuiTool workflow;
-7. document which `.xur`/`.xui` assets can be opened, edited, regenerated or repacked;
+7. document which XUI/XUR assets can be opened, edited, regenerated, or repacked;
 8. create a derivative working copy for standalone-host testing.
 
 Do not invent XuiTool command-line flags.
 
 ## Public-repository boundary
 
-The working ZIP contains third-party/historical resources whose redistribution status has not been established here. Keep the owner-supplied package under `references/local/` during development, do not commit the raw ZIP automatically, do not upload XDK binaries, and do not assume every supplied font/resource is redistributable. Record hashes/manifests in Git and add only intentionally approved distributable resources.
+The working ZIP contains third-party/historical resources whose redistribution status has not been established here. Keep the package developer-local under `references/local/` unless redistribution is intentionally approved.
 
-This does **not** mean Codex should ignore the package. It remains the implementation baseline on the developer machine.
+Do not commit proprietary XDK binaries, original Microsoft dashboard binaries/executable code, or assume every supplied resource is redistributable.
 
-## Precedence over the old from-scratch strategy
+This does not make the package optional. It remains the product frontend baseline on the developer machine.
 
-For any UI/state already implemented in `BladeDash(2005)`:
+## Retail 6770 supplemental rule
 
-1. use the working skin resource first;
-2. make the standalone host satisfy its expected data/event contract;
-3. validate against the known-good running skin and Retail 6770 references;
-4. modify the UI only for a documented incompatibility or fidelity defect.
+Retail 2.0.6770 may be consulted only when BladeDash does not adequately define a required state or behavior.
 
-Do **not** start by drawing replacement Blade panels from screenshots. Do **not** recreate animations already present in `skin.xui`. Do **not** rebuild working scene geometry unless the supplied scene is proven unusable.
+For a genuine missing state:
 
-The older Retail 6770 milestone remains useful for feature scope, backend goals and fidelity acceptance, but its from-scratch UI construction sequence is superseded by this baseline.
+1. identify the exact BladeDash gap;
+2. consult confirmed Retail 6770 evidence;
+3. reconstruct only the missing portion;
+4. keep it visually compatible with the approved BladeDash frontend;
+5. do not alter unrelated BladeDash-defined states.
+
+For BladeDash-defined states, missing Retail screenshots are not a blocker and are not a `REFERENCE_GAP`.
+
+## Migration fidelity
+
+For existing BladeDash states, primary comparison is:
+
+```text
+Known-good BladeDash(2005) under its original host
+                         vs
+Standalone BladeDashboard.xex using the migrated frontend
+```
+
+Validate geometry, focus, navigation, transitions, animation timing, menu hierarchy, dialogs, and audio timing.
+
+Retail 6770 comparison is optional supplemental research for these states and cannot overrule the approved frontend.
+
+## Precedence over old from-scratch strategy
+
+For every state already implemented in BladeDash:
+
+1. use the existing resource first;
+2. make the standalone host satisfy its data/event contract;
+3. validate against known-good BladeDash behavior;
+4. modify presentation only for a documented technical incompatibility or explicit owner decision.
+
+Do not start by drawing replacement Blade panels from screenshots. Do not recreate animations already present in `skin.xui`. Do not rebuild scene geometry unless the supplied resource is proven unusable.
+
+`docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md` is legacy/supplemental scope material only and cannot override this baseline.
 
 ## Feasibility conclusion
 
 **Feasible and preferred.**
 
-The supplied package materially reduces project uncertainty because the difficult presentation work already exists in a working Xbox 360 XUI implementation. The primary engineering challenge is now replacing the FSD host/runtime with a standalone XEX plus compatible service adapters. CCLOS/ConsoleCrate backend code can provide much of the required modern functionality while the supplied Blade skin remains responsible for presentation.
+The difficult presentation work already exists in a working Xbox 360 XUI implementation. The primary engineering challenge is replacing the FSD host/runtime with a standalone XEX plus compatible service adapters.
 
-Treat this as a **working-skin runtime transposition/host replacement project**, not a screenshot-driven recreation project.
+Treat this as a **working-skin runtime transposition/host replacement project**.
+
+## Final rule
+
+**BladeDash(2005) is the product specification. Retail 6770 fills genuine gaps only.**
