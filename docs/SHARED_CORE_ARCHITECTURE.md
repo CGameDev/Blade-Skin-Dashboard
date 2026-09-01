@@ -2,13 +2,13 @@
 
 ## Status
 
-**Mandatory architectural contract for the standalone Blade dashboard.**
+**Mandatory architectural contract for Blade Dashboard.**
 
-This document defines how the Blade frontend may reuse proven CCLOS/ConsoleCrate infrastructure without coupling the Blade product to the CCLOS UI/application.
+This document defines how the approved BladeDash frontend reuses proven CCLOS/ConsoleCrate infrastructure without coupling Blade to the CCLOS UI/application.
+
+Explicit product mappings are defined by `OWNER_DECISIONS.md`.
 
 ## Core design
-
-The project SHALL use the approved `BladeDash(2005)` XUI/XUR implementation as the presentation layer and reuse proven CCLOS/ConsoleCrate backend/service logic behind compatibility facades and Blade-specific adapters.
 
 ```text
 Approved BladeDash(2005) XUI/XUR frontend
@@ -23,68 +23,62 @@ Approved BladeDash(2005) XUI/XUR frontend
                 |
        Xbox 360 platform APIs
                 |
-        BladeDashboard.xex
+Hdd1:\Apps\BladeDashboard\default.xex
 ```
 
-The important boundary is that Blade depends on reusable services and platform abstractions, **not on CCLOS screens, view models, widgets, navigation classes, or the CCLOS application runtime**.
+Blade depends on reusable services/platform abstractions, **not CCLOS screens, view models, widgets, navigation classes, local installation state, or the CCLOS application runtime**.
 
-## Design principle
+Guiding principle:
 
 **BladeDash supplies the face. ConsoleCrate/CCLOS supplies proven infrastructure. The standalone Blade XEX owns the runtime.**
 
-The same backend capability may support multiple frontends:
+---
 
-```text
-                 Shared ConsoleCrate Core
-                 /                      \
-         CCLOS presentation        Blade presentation
-```
-
-A service improvement should be reusable by both products whenever technically appropriate without forcing either frontend to adopt the other's UI or navigation model.
-
-## Required layering
-
-### 1. Blade presentation
+# 1. Blade presentation layer
 
 Use the supplied working resources wherever technically possible:
 
 - `skin.xui`;
 - existing `.xur` scenes;
-- Blade geometry;
-- timelines and animations;
+- geometry;
+- timelines/animations;
 - focus/navigation presentation;
-- textures and DDS resources;
-- XMA audio cues;
+- textures/DDS;
+- XMA audio;
 - fonts;
-- meshes and shaders;
-- dialogs and loading presentation.
+- meshes/shaders;
+- dialogs/loading presentation.
 
-Do not redraw these merely to make backend integration easier.
+Do not redraw these merely to simplify backend integration.
 
-### 2. FSD compatibility layer
+Keep the presentation externally editable/repackable through the verified XUI/XuiTool workflow whenever technically possible.
 
-The working skin was authored for Freestyle 3/FSD and may expect host-facing objects, events, data sources, callbacks, scene factories, or commands.
+---
 
-Codex SHALL map and document those contracts instead of rewriting the corresponding UI.
+# 2. FSD compatibility layer
 
-Examples may include concepts such as:
+The working skin expects FSD-facing objects/events/data sources/callbacks/commands.
+
+Map/document those contracts instead of rewriting corresponding UI.
+
+Examples:
 
 - `GamesList`;
 - `AchievementManager`;
-- `ActiveTUList` / Title Update manager;
+- `ActiveTUList`;
 - profile/gamercard data;
 - system information;
-- path/file lists;
+- file/path lists;
 - CoverFlow;
-- HTTP/server state;
 - popup/dialog services;
-- media/weather/avatar data where present.
+- media services;
+- HTTP/server state where retained.
 
-Where practical, retain the semantic contract expected by the skin and provide a newly written compatible implementation behind it.
+Where practical retain the semantic contract expected by the skin and provide a new compatible implementation behind it.
 
-### 3. Blade adapters
+---
 
-Blade adapters translate between the working skin's presentation contract and shared backend services.
+# 3. Blade adapters
 
 Preferred pattern:
 
@@ -96,67 +90,133 @@ Blade-specific adapter
 shared service interface
 ```
 
-Examples:
+Owner-approved examples:
 
 ```text
 GamesList
   -> BladeGameLibraryAdapter
   -> LibraryService
 
+Blade game actions
+  -> BladeLaunchAdapter
+  -> LaunchService
+
 TitleUpdateManager
   -> BladeTitleUpdateAdapter
   -> TitleUpdateService
 
-Blade Marketplace scene
+Achievements
+  -> BladeAchievementAdapter
+  -> AchievementService
+
+Trainers
+  -> BladeTrainerAdapter
+  -> TrainerService
+
+CopyDVD
+  -> BladeDiscCopyAdapter
+  -> DiscCopyService (CCLOS Disc-to-GOD)
+
+Blade Marketplace
   -> BladeMarketplaceAdapter
   -> MarketplaceService
 
 Blade download state
   -> BladeDownloadAdapter
   -> DownloadService
+
+Blade Media Center
+  -> BladeMediaAdapter
+  -> MediaService / CCLOS Watch TV capability
 ```
 
-The adapter is responsible for translating service/domain data into the exact fields and states expected by the Blade presentation.
+The adapter translates service/domain data into the exact fields/states expected by BladeDash.
 
-## Shared services that SHOULD be reused
+---
 
-Codex should prefer proven reusable logic from CCLOS/ConsoleCrate for capabilities such as:
+# 4. Required reusable service surface
 
-- installed-content/game discovery;
-- TitleID/content detection;
-- launch operations;
-- Marketplace catalog access;
-- download pipeline and queue management;
-- segmented/single-download mechanics where already proven;
-- caching;
-- HTTP/network transport;
-- Title Update checks/download/application logic;
-- filesystem abstractions;
-- storage enumeration;
-- settings persistence;
-- metadata parsing;
-- background tasks;
-- diagnostics/logging;
-- profile/platform information where reusable.
+Prefer/derive neutral service interfaces such as:
 
-Reuse implementation logic, interfaces, parsers, algorithms and service abstractions when appropriate.
+- `LibraryService`
+- `LaunchService`
+- `MarketplaceService`
+- `DownloadService`
+- `TitleUpdateService`
+- `AchievementService`
+- `TrainerService`
+- `DiscCopyService`
+- `MediaService`
+- `ProfileService`
+- `StorageService`
+- `NetworkService`
+- `FileSystemService`
+- `SettingsService`
+- `CacheService`
+- `MetadataService`
+- `DiagnosticsService`
 
-Do not duplicate a backend simply because Blade is a separate frontend.
+Names may differ in implementation, but boundaries must remain presentation-neutral.
 
-## Explicitly prohibited coupling
+---
 
-Blade code SHALL NOT call CCLOS presentation classes or depend on CCLOS being launched/running.
+# 5. Feature retention rule
 
-Forbidden patterns include equivalents of:
+When BladeDash has the frontend and a real standalone service can supply the function, **retain the Blade feature**.
+
+Do not remove it because FSD used to own the backend.
+
+Explicit retained mappings include:
+
+- CopyDVD -> CCLOS Disc-to-GOD;
+- Achievements -> CCLOS/Xbox achievements;
+- Title Updates -> CCLOS TU handling;
+- Trainers -> CCLOS trainer/runtime;
+- Marketplace -> ConsoleCrate Marketplace;
+- Downloads -> CCLOS download/queue/high-throughput pipeline;
+- Media Center -> CCLOS Watch TV/media capability.
+
+Other Blade features should use reusable CCLOS or Xbox platform services where technically practical.
+
+For obsolete external services with no real replacement, do not fake functionality or leave dead calls. Preserve UI and use an existing unavailable state, or record `OWNER_DECISION_REQUIRED`.
+
+---
+
+# 6. Media Center hard boundary
+
+The existing Blade Media / Media Center presentation is frozen.
+
+```text
+Existing Blade Media XUI
+        |
+BladeMediaAdapter
+        |
+MediaService
+        |
+CCLOS Watch TV/media backend logic
+```
+
+Do not import the CCLOS Watch TV UI.
+
+Do not change Blade media geometry, scene chrome, fonts, transitions or navigation model to fit the backend.
+
+A Watch TV menu/list action may be inserted only through existing Blade list/control patterns.
+
+---
+
+# 7. Explicitly prohibited coupling
+
+Forbidden equivalents:
 
 ```cpp
 CCLOSMarketplaceScreen->LoadGames();
 CCLOSDownloadsPage->StartDownload();
 CCLOSGameCard->Bind(...);
 CCLOSNavigationManager->Open(...);
+CCLOSWatchTVScreen->Open(...);
 ```
 
-Preferred patterns are service-oriented:
+Preferred service-oriented equivalents:
 
 ```cpp
 MarketplaceService->GetCatalog();
@@ -164,29 +224,65 @@ DownloadService->StartDownload();
 LibraryService->EnumerateGames();
 TitleUpdateService->CheckUpdates();
 LaunchService->LaunchTitle();
+DiscCopyService->StartDiscToGod();
+MediaService->OpenStream(...);
 ```
 
-The Blade frontend then consumes those services through Blade-specific adapters.
+Blade presentation consumes those services through Blade-specific adapters.
 
-## Independence requirements
+---
 
-The final `BladeDashboard.xex` SHALL:
+# 8. CCLOS source and provenance
+
+Authoritative source:
+
+```text
+CGameDev/ConsoleCrateLive
+branch: main
+```
+
+Before backend reuse, record exact source commit in `BACKEND_PROVENANCE.md`.
+
+Do not use backup repositories as authority without owner direction.
+
+Do not casually modify CCLOS while building Blade.
+
+---
+
+# 9. Production infrastructure
+
+Authoritative production service:
+
+```text
+consolecratelive.online
+```
+
+Do not revive deprecated NAS/Cloudflare CCLOS infrastructure because stale reused code references it.
+
+Do not duplicate an existing ConsoleCrate backend for Blade.
+
+---
+
+# 10. Standalone independence
+
+`BladeDashboard/default.xex` must:
 
 - launch independently;
 - initialize its own XUI/runtime host;
-- own its navigation lifecycle;
-- own its presentation state;
-- work without Aurora;
-- work without Freestyle Dash;
-- work without CCLOS running;
+- own navigation lifecycle;
+- own presentation state;
+- work without Aurora/FSD/CCLOS running;
 - not require CCLOS UI binaries/resources;
-- use shared/backend code only through owned libraries, source modules, service interfaces or intentionally extracted reusable components.
+- own local Config/Cache/Data/Logs/Skins state;
+- use shared/backend code only through owned libraries/source modules/service interfaces/reusable extracted components.
 
-## Shared-core evolution
+---
 
-Codex MAY initially reuse proven CCLOS service code in-place when that is the safest way to establish functionality.
+# 11. Shared-core evolution
 
-However, when reusable code is clearly not presentation-specific, prefer progressively extracting it into a neutral reusable core such as `ConsoleCrateCore`, `CCLCore`, or equivalent.
+Codex may initially port/adapt proven CCLOS service code to establish functionality.
+
+When code is clearly presentation-neutral, progressively extract it into a neutral reusable core (`ConsoleCrateCore`, `CCLCore`, or equivalent).
 
 Desired long-term model:
 
@@ -197,39 +293,37 @@ Desired long-term model:
           presentation      presentation
 ```
 
-Do not perform a large speculative refactor before the first standalone Blade proof-of-architecture. Extract shared code incrementally as real reuse points are proven.
+Do not perform a large speculative refactor before the first standalone Blade proof succeeds.
 
-## First architectural proof
+---
 
-Before broad backend integration, Codex must prove:
+# 12. First architectural proof
 
-1. standalone Xbox 360 XEX initializes XUI;
-2. an existing BladeDash scene/resource renders without FSD/Aurora;
-3. navigation/input can be owned by the standalone host;
-4. at least one FSD-facing contract can be replaced by a newly written facade/adapter backed by a real service.
+Before broad backend integration, prove:
 
-This proves both halves of the architecture before scaling it across the dashboard.
+1. standalone `default.xex` initializes XUI;
+2. existing BladeDash scene/resource renders without FSD/Aurora;
+3. navigation/input is owned by standalone host;
+4. one FSD-facing contract is replaced by a facade/adapter backed by a real service;
+5. external/editable frontend packaging strategy is documented.
 
-## Backend integration order
+---
 
-After the rendering proof, preferred sequence is:
+# 13. Preferred integration order
+
+After rendering proof:
 
 1. main Blade shell/navigation;
 2. installed game/content list;
 3. launch service;
-4. Marketplace adapter;
-5. download service;
-6. Title Update service;
-7. profile/system/storage/network services;
-8. remaining FSD-specific contracts;
-9. performance and regression pass.
-
-## UI fidelity rule
-
-Backend limitations do not grant permission to redesign Blade.
-
-When a modern/shared service exposes additional fields that the Blade frontend does not have a historical place to display, do not add modern UI by default. Keep the data behind the adapter until the project owner defines a fidelity-safe presentation.
+4. CopyDVD -> Disc-to-GOD;
+5. Achievements/Title Updates/Trainers;
+6. Marketplace + downloads;
+7. Media Center + Watch TV;
+8. profile/system/storage/network/filesystem;
+9. remaining FSD-specific contracts;
+10. performance/regression pass.
 
 ## Final rule
 
-**Reuse the CCLOS/ConsoleCrate brains, not the CCLOS face. Preserve the proven Blade face, replace its old FSD host, and keep the final Blade dashboard independently runnable.**
+**Reuse the CCLOS/ConsoleCrate brains, not the CCLOS face. Preserve every practical Blade feature, including its existing Media Center presentation, and replace FSD services underneath with real standalone services.**
