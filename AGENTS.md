@@ -4,32 +4,44 @@ These instructions apply to the entire repository.
 
 ## Mission
 
-Build a **standalone Xbox 360 Blade dashboard** using the developer-verified working `BladeDash(2005)` Freestyle 3/FSD skin as the canonical implementation seed.
+Build a **standalone Xbox 360 Blade dashboard** using the developer-approved, developer-tested `BladeDash(2005)` Freestyle 3/FSD skin as the product frontend and canonical implementation seed.
 
-The final standalone XEX must preserve the supplied working Blade presentation wherever technically possible while replacing Freestyle Dash host/runtime dependencies with newly owned runtime code and Blade-specific adapters backed by proven CCLOS/ConsoleCrate services.
+The final standalone XEX must preserve the supplied working Blade presentation and behavior wherever technically possible while replacing Freestyle Dash host/runtime dependencies with newly owned runtime code and Blade-specific adapters backed by proven ConsoleCrate/CCLOS services.
 
-The visual validation target remains the **Xbox 360 Retail Blades Dashboard build 2.0.6770**.
+This is a working-skin host-replacement project, not a from-scratch Blade recreation project.
 
-This is no longer a from-scratch Blade UI recreation project when the approved skin already implements the state.
+## Absolute authority rule
+
+**`BladeDash(2005)` is the absolute visual and behavioral authority.**
+
+When the approved package defines a screen, scene, geometry, focus state, navigation behavior, animation, transition, menu hierarchy, dialog, loading state, sound event, typography placement, visual effect, or other presentation detail, that implementation wins.
+
+Retail Xbox 360 Blades build 2.0.6770 is **supplemental historical reference only** and may be used only when `BladeDash(2005)` does not adequately define the required state or behavior.
+
+Do not change a working BladeDash-defined state merely because Retail 6770 footage, a nearby build, a community recreation, or remembered behavior differs.
+
+Read `docs/AUTHORITY_HIERARCHY.md` for the complete precedence rules.
 
 ## Read first
 
 Before changing UI, navigation, architecture, Marketplace behavior, build tooling, or XUI resources, read in this order:
 
 1. `README.md`
-2. `docs/WORKING_SKIN_BASELINE.md`
-3. `docs/MILESTONE_000_WORKING_SKIN_STANDALONE_TRANSPOSE.md`
-4. `docs/SHARED_CORE_ARCHITECTURE.md`
-5. `docs/FIDELITY_DIRECTIVE.md`
-6. `docs/CODEX_EXECUTION_RULES.md`
-7. `docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md`
+2. `docs/AUTHORITY_HIERARCHY.md`
+3. `docs/WORKING_SKIN_BASELINE.md`
+4. `docs/MILESTONE_000_WORKING_SKIN_STANDALONE_TRANSPOSE.md`
+5. `docs/SHARED_CORE_ARCHITECTURE.md`
+6. `docs/FIDELITY_DIRECTIVE.md`
+7. `docs/CODEX_EXECUTION_RULES.md`
 8. `docs/REFERENCE_MATRIX.md`
 
-`WORKING_SKIN_BASELINE.md`, Milestone 000 and `SHARED_CORE_ARCHITECTURE.md` take precedence over older from-scratch implementation sequencing.
+`AUTHORITY_HIERARCHY.md` overrides older Retail-6770-first wording anywhere else in the repository.
+
+`docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md` is legacy/supplemental scope material only. It must not override BladeDash-defined presentation or Milestone 000 sequencing.
 
 ## Canonical implementation seed
 
-Developer-local source package:
+Developer-local package:
 
 ```text
 references/local/BladeDash(2005).zip
@@ -41,69 +53,57 @@ Approved SHA-256:
 b3ac2dbd88f0cd4cdda7c9bc8b10e7dc17f14f43f3e89e3f509bf13b5de6174b
 ```
 
-Expected extracted source:
+Expected extraction directory:
 
 ```text
 references/local/BladeDash(2005)/
 ```
 
-The package includes the working XUI/XUR/resources and is the first implementation source Codex must inspect.
+The package contains the working XUI/XUR/resources and is the first implementation source Codex must inspect.
 
-Do not silently substitute a different Blade skin.
-
-## Canonical visual target
-
-- Validation target: **Retail 2.0.6770**
-- Primary historical build reference: `https://github.com/thedev0ps/Xbox-360-Dashboard-Archive/tree/main/Blades/Retail/6770`
-- Older Blades builds are validation/reference-only and must not be blended into the final UI without evidence.
-
-The historical archive validates fidelity. It is no longer the first place Codex should start drawing UI that already exists in the approved working skin.
+Never silently substitute another Blade skin.
 
 ## Hard rules
 
 - Do not rebuild working Blade UI from screenshots.
-- Do not modernize the UI.
-- Do not reinterpret the UI.
+- Do not use Retail 6770 to override a BladeDash-defined state.
+- Do not modernize or reinterpret the approved frontend.
 - Do not add creative design changes.
 - Do not use Metro/NXE visual language.
 - Do not reuse CCLOS visual components.
-- Do reuse CCLOS/ConsoleCrate backend/service logic behind Blade adapters when useful.
+- Do reuse ConsoleCrate/CCLOS backend/service logic behind Blade adapters when useful.
 - Do not call CCLOS presentation screens, widgets, navigation classes or view models from Blade code.
 - Do not require CCLOS to be running for Blade to function.
-- Prefer shared service interfaces such as LibraryService, MarketplaceService, DownloadService, TitleUpdateService and LaunchService over presentation-specific integration.
-- When reusable backend code is proven independent of CCLOS presentation, progressively extract it into a neutral shared core rather than duplicating it.
+- Prefer neutral shared service interfaces such as `LibraryService`, `MarketplaceService`, `DownloadService`, `TitleUpdateService`, and `LaunchService`.
 - Do not perform a speculative large shared-core refactor before the standalone Blade proof-of-architecture succeeds.
 - Do not depend on Aurora or Freestyle Dash at runtime.
-- Do not replace working geometry, timelines, animations, focus states or audio without a documented technical/fidelity reason.
-- Do not create generic colored Blade panels when the approved skin already supplies the Blade presentation.
-- Do not guess missing 6770 states.
-- Do not claim fidelity completion without comparison evidence.
+- Do not replace working geometry, timelines, animations, focus states, dialogs, or audio unless a documented technical limitation requires it.
+- Do not create generic Blade panels when the approved skin already supplies the presentation.
 - Preserve an untouched golden copy of the approved skin before editing.
 
-If a visual fact is unknown and the working skin does not define it, mark it `REFERENCE_GAP`.
+A `REFERENCE_GAP` exists only when the required state is not adequately defined by BladeDash, no owner decision defines it, and supplemental historical evidence is insufficient.
 
 ## Implementation strategy
 
-For any state already implemented in the approved `BladeDash(2005)` package:
+For every state already implemented in `BladeDash(2005)`:
 
-1. inspect/reuse the existing XUI/XUR/resource;
-2. identify the FSD host/data/event contract it expects;
-3. implement a compatibility facade/presentation model behind it;
-4. map that facade to owned platform services or proven CCLOS/ConsoleCrate backend logic;
-5. run the scene on the standalone host;
-6. validate against the known-good skin and Retail 6770 evidence;
-7. modify the UI only when a documented incompatibility/fidelity defect requires it.
+1. inspect and reuse the existing XUI/XUR/resource;
+2. preserve its visual and behavioral contract;
+3. identify the FSD host/data/event contract it expects;
+4. implement a compatibility facade/presentation model behind it;
+5. map that facade to owned platform services or proven ConsoleCrate/CCLOS backend logic;
+6. run the existing scene on the standalone host;
+7. compare the standalone result to the known-good BladeDash behavior;
+8. modify the UI only when a documented technical incompatibility requires it.
 
-Do not redraw first and wire backend later.
+Do not redraw first and wire the backend later.
 
-## Shared-core rule
-
-The canonical architecture is:
+## Shared-core architecture
 
 ```text
-Approved Blade XUI/XUR frontend
+BladeDash(2005) XUI/XUR frontend
         |
-FSD compatibility facade
+FSD/Blade compatibility facade
         |
 Blade presentation models
         |
@@ -112,31 +112,15 @@ Blade adapters
 Shared ConsoleCrate/CCLOS-derived services
         |
 Xbox 360 platform APIs
+        |
+Standalone BladeDashboard.xex
 ```
 
-The guiding principle is:
+Guiding principle:
 
 **BladeDash supplies the face. ConsoleCrate/CCLOS supplies proven infrastructure. The standalone Blade XEX owns the runtime.**
 
-See `docs/SHARED_CORE_ARCHITECTURE.md` for the mandatory service boundaries and prohibited coupling patterns.
-
-## Host-replacement architecture
-
-Maintain separation:
-
-```text
-Approved Blade XUI/XUR UI
-        |
-FSD/Blade compatibility facade
-        |
-Blade presentation models
-        |
-Blade adapters
-        |
-Standalone services / shared ConsoleCrate services / Xbox 360 platform APIs
-```
-
-The UI must not bind directly to CCLOS screen/widget implementations.
+See `docs/SHARED_CORE_ARCHITECTURE.md` for mandatory service boundaries.
 
 ## Marketplace
 
@@ -144,13 +128,13 @@ Use the existing ConsoleCrate/CCLOS Marketplace infrastructure through an adapte
 
 Do not create a duplicate Marketplace backend.
 
-Map modern catalog/download data into the existing Blade presentation contract. Backend concepts must not change the visible Blade UI.
+Map catalog/download data into the existing BladeDash presentation contract. Backend concepts must not alter the visible frontend.
 
 ## Standalone requirement
 
 The final application must be an independent Xbox 360 dashboard XEX.
 
-Do not require Aurora, Freestyle Dash or the CCLOS application for rendering, data, navigation, launching, Marketplace behavior, settings, game lists or profile/system information.
+Do not require Aurora, Freestyle Dash, or the CCLOS application for rendering, data, navigation, launching, Marketplace behavior, settings, game lists, or profile/system information.
 
 The standalone XEX replaces the old host, not the Blade presentation.
 
@@ -171,9 +155,9 @@ Preserve reusable non-UI work such as:
 - tests;
 - background task/performance infrastructure.
 
-Discard or quarantine UI that competes with the approved working skin unless it solves a proven missing/unusable state.
+Discard or quarantine UI that competes with the approved BladeDash frontend unless it solves a proven missing/unusable state.
 
-Record this in `docs/LEGACY_ATTEMPT_AUDIT.md`.
+Record the audit in `docs/LEGACY_ATTEMPT_AUDIT.md`.
 
 ## XUI/XuiTool
 
@@ -181,13 +165,11 @@ The project owner has verified that the approved skin can be edited in XuiTool.
 
 Inspect the developer's actual local Xbox 360 XDK/XUI environment before assuming paths or commands.
 
-Record actual findings in `docs/BUILD_ENVIRONMENT.md`.
+Record findings in `docs/BUILD_ENVIRONMENT.md`.
 
 Codex must test the supplied `skin.xui`/XUR workflow directly before generating replacement UI.
 
 Do not invent undocumented XuiTool command-line switches.
-
-Automate supported/repeatable steps. Document unavoidable GUI-only XuiTool steps precisely.
 
 Do not commit proprietary XDK files.
 
@@ -197,33 +179,21 @@ The approved ZIP is developer-local implementation material and is intentionally
 
 Do not automatically commit the raw ZIP, XDK files, original Microsoft dashboard binaries, extracted executable code, or resources whose redistribution status has not been intentionally approved.
 
-This repository may record hashes, manifests, compatibility notes, newly written code and intentionally approved resources.
-
 Keeping the raw source package local does not make it optional: Codex must use it as the implementation baseline on the developer machine.
 
 ## Fidelity testing
 
-For major states, compare where practical:
+For BladeDash-defined states, primary migration validation is:
 
-1. Retail 6770 historical reference;
-2. known-good `BladeDash(2005)` running under its original host;
-3. the standalone BladeDashboard XEX using the migrated presentation.
+```text
+Known-good BladeDash(2005) under its working host
+                    vs
+Standalone BladeDashboard.xex
+```
 
-Produce where useful:
+The standalone host must preserve geometry, typography placement, colors, focus behavior, navigation, transition behavior, animation timing, and audio timing.
 
-- side-by-side comparison;
-- 50/50 overlay;
-- difference visualization;
-- discrepancy report.
-
-Severity:
-
-- F0 = blocker
-- F1 = major
-- F2 = moderate
-- F3 = minor
-
-No fidelity-approved screen may have open F0/F1 issues.
+Retail 6770 may be consulted only for states or details not adequately defined by BladeDash. It must not be used to "correct" an approved BladeDash-defined state.
 
 ## Testing cadence
 
@@ -236,22 +206,22 @@ Batch hardware testing at meaningful checkpoints, especially:
 - installed game list + launch;
 - Marketplace integration;
 - system/profile/settings group;
-- final regression/fidelity pass.
+- final migration regression pass.
 
 Continue compile/static/resource validation between hardware gates.
 
 ## Documentation
 
-Do not leave critical project decisions only in chat/session history.
+At every meaningful checkpoint, record source resources reused, compatibility contracts implemented, files changed, build status, console-test status, migration fidelity status, limitations, gaps, and next work.
 
-At the end of each meaningful checkpoint, update repository documentation with references used, source resources reused, compatibility contracts implemented, files changed, build status, fidelity status, open discrepancies, limitations and next work.
+Do not leave critical decisions only in Codex chat history.
 
 ## Definition of done
 
-A screen is not done because a replacement recreation compiles or resembles Blades.
+For states present in the approved skin, success means the standalone host runs the **existing approved presentation** with equivalent geometry, typography, colors, focus behavior, navigation, transitions, animations, and audio timing while providing the required live backend behavior.
 
-For states present in the approved working skin, success means the standalone host runs the existing presentation with equivalent geometry, typography, colors, focus behavior, navigation, transition behavior and audio timing while providing the required live backend behavior.
+For states absent from BladeDash, use the authority hierarchy to reconstruct only the missing portion without redesigning existing approved states.
 
 ## Final instruction
 
-**Do not rebuild what already works. Preserve the approved Blade frontend, reuse the proven ConsoleCrate/CCLOS service infrastructure behind clean adapters, and replace the missing FSD runtime with a standalone host.**
+**BladeDash(2005) is the product specification. Preserve it. Replace the missing FSD runtime underneath it. Use Retail 6770 only to fill genuine gaps.**
