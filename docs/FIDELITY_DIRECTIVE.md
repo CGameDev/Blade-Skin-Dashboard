@@ -1,12 +1,12 @@
-# Retail 6770 Blades Fidelity Directive
+# BladeDash(2005) Fidelity Directive
 
 ## Status
 
 **NON-NEGOTIABLE PROJECT RULE**
 
-This document governs every UI, navigation, animation, audio, layout, and presentation decision in Blade-Skin-Dashboard.
+This document governs UI, navigation, animation, audio, layout, interaction, and presentation fidelity in Blade-Skin-Dashboard.
 
-If another document, implementation shortcut, generated design, framework default, or developer assumption conflicts with this directive, **this directive wins**.
+If another document, implementation shortcut, framework default, generated design, historical reference, or developer assumption conflicts with this directive, **this directive and `AUTHORITY_HIERARCHY.md` win**.
 
 ---
 
@@ -14,484 +14,399 @@ If another document, implementation shortcut, generated design, framework defaul
 
 The canonical visual and behavioral target is:
 
-**Microsoft Xbox 360 Retail Blades Dashboard — system/dashboard build 2.0.6770**
+**The developer-approved `BladeDash(2005)` working Freestyle 3/FSD skin package.**
 
-Primary reference repository:
+Approved local package:
 
-https://github.com/thedev0ps/Xbox-360-Dashboard-Archive/tree/main/Blades/Retail/6770
+```text
+references/local/BladeDash(2005).zip
+```
 
-Older Blades builds may be studied only when a 6770 state cannot be adequately observed. They must never be blended into the final UI merely because an older screenshot is easier to find.
+Approved SHA-256:
 
-Build 6770 is the authority.
+```text
+b3ac2dbd88f0cd4cdda7c9bc8b10e7dc17f14f43f3e89e3f509bf13b5de6174b
+```
 
----
+The project owner has run this skin and approved its appearance and behavior as the desired frontend.
 
-# 2. Exact-replica objective
+**BladeDash(2005) is the authority.**
 
-The target is not “inspired by” the Blades dashboard.
-
-The target is a **standalone recreation whose rendered UI, motion, hierarchy, and controller response are as close to Retail 6770 as technically possible**.
-
-The intended acceptance reaction is:
-
-> When the recreated dashboard and an original Retail 6770 dashboard are shown side by side under equivalent conditions, a viewer familiar with the Xbox 360 Blades dashboard should have difficulty distinguishing them from appearance and interaction alone.
-
-This means visual similarity is not a secondary polish task. Fidelity is a functional requirement.
+Retail Xbox 360 Blades build 2.0.6770 is supplemental historical reference and is used only for a required state or behavior not adequately defined by BladeDash.
 
 ---
 
-# 3. Forbidden interpretation
+# 2. Fidelity objective
 
-Codex and contributors MUST NOT describe or implement this project as:
+The goal is not to recreate Retail 6770 from screenshots.
 
-- Blade-inspired
-- Blade-themed
-- a modernized Blade dashboard
-- a Metro/Blade hybrid
-- an Aurora Blade skin
-- a CCLOS skin
-- a reinterpretation
-- a concept dashboard
-- an approximation where exact information is available
-- a “cleaner” version of Blades
-- a “more modern” version of Blades
-- a version with usability improvements that change the visible UI
+The goal is to transpose the approved working BladeDash frontend onto a new standalone Xbox 360 host while preserving its visible and interactive behavior.
 
-Do not modernize awkward original behaviors simply because a contemporary alternative seems better.
+For states already defined by BladeDash, the intended acceptance reaction is:
 
-Historical quirks that are observable and technically reproducible are part of the target.
+> The same BladeDash state running on the standalone host should be difficult to distinguish from the known-good BladeDash state running under its original host.
+
+Host replacement must not visibly reinvent the dashboard.
 
 ---
 
-# 4. No unsolicited design decisions
+# 3. Authority order
 
-Codex has **zero authority to redesign the visual interface**.
+When evidence disagrees, use this order:
 
-Codex must not independently:
+1. developer-approved `BladeDash(2005)` running behavior and supplied resources;
+2. BladeDash XUI/XUR/XML/audio/resource definitions;
+3. explicit project-owner decisions recorded in this repository;
+4. confirmed Retail 2.0.6770 evidence, only for gaps not defined by BladeDash;
+5. nearby Retail Blades builds for unresolved gaps when equivalence is supported;
+6. other historical/community material as clues only;
+7. memory, generated mockups, assumptions, or creative guesses are never authoritative.
 
-- change proportions;
-- change blade widths;
-- change menu spacing;
-- change font sizing;
-- change alignment;
-- substitute modern icons;
-- introduce rounded cards;
-- introduce Metro tiles;
-- change gradients;
-- flatten gloss effects;
-- simplify metallic separators;
-- add floating UI;
-- change the hierarchy;
-- replace full-screen legacy views with blade views;
-- replace blade navigation with tabs;
+A Retail 6770 difference is **not** automatically a BladeDash defect.
+
+Do not alter an approved BladeDash-defined state merely because a historical reference differs.
+
+---
+
+# 4. Forbidden interpretation
+
+Codex and contributors must not treat the project as:
+
+- a fresh Retail 6770 recreation;
+- Blade-inspired;
+- Blade-themed;
+- a modernized Blade dashboard;
+- a Metro/Blade hybrid;
+- a CCLOS skin;
+- a concept dashboard;
+- a chance to improve or normalize the approved skin;
+- a reason to redraw working states from screenshots.
+
+The approved skin is the product frontend.
+
+---
+
+# 5. No unsolicited design decisions
+
+Codex has zero authority to redesign BladeDash-defined presentation.
+
+Without an explicit owner decision or documented technical incompatibility, do not independently:
+
+- change proportions or blade widths;
+- change menu spacing or text placement;
+- change fonts/sizing/alignment;
+- change colors, gradients, gloss, transparency, or textures;
+- substitute icons;
+- simplify separators;
+- alter focus/highlight states;
 - alter controller legends;
 - move status information;
-- add new decorative transitions;
-- change animation timing for taste;
-- change colors for consistency;
-- copy CCLOS visual components into this project.
+- change menu hierarchy;
+- alter navigation semantics;
+- alter animation direction, timing, sequencing, or easing;
+- replace dialogs/loading states;
+- replace existing XMA sound-event timing;
+- import CCLOS visual language;
+- normalize quirks merely because another historical source looks different.
 
-When the reference looks unusual by modern standards, reproduce it.
-
----
-
-# 5. Reference-first rule
-
-No major UI screen may be implemented from memory.
-
-Before implementing a screen or state, Codex must:
-
-1. Identify the exact Retail 6770 screen/state being recreated.
-2. Record the reference source in `docs/REFERENCE_MATRIX.md`.
-3. Capture or identify at least one reliable still reference.
-4. Where motion occurs, identify a motion/video reference or derive the state sequence from repeated observation.
-5. Record observable geometry, hierarchy, focus state, text placement, colors, and controller behavior.
-6. Implement only after the reference is documented.
-7. Capture the recreated state.
-8. Compare recreated and original states.
-9. Correct discrepancies before declaring the screen complete.
-
-If reliable information is unavailable, Codex must mark the item `REFERENCE GAP` rather than inventing a solution.
+Preserve the approved frontend first.
 
 ---
 
-# 6. Source priority order
+# 6. Reuse-first rule
 
-When references disagree, use this order:
+For a state present in BladeDash, Codex must:
 
-1. **Confirmed Retail 6770 footage/screenshot/state from original hardware or the canonical 6770 build.**
-2. Multiple independent Retail 6770 visual references.
-3. Retail 6717/6690/6683 material only when the element is demonstrably unchanged in 6770.
-4. Earlier Blades material only as structural evidence.
-5. Community recreation material only as a clue, never as visual authority.
-6. Memory, assumptions, or generated guesses are not acceptable references.
+1. identify the existing XUI/XUR/resource that defines it;
+2. identify the host/data/event contract it expects;
+3. reuse the existing presentation;
+4. implement the missing standalone host contract behind it;
+5. bind dynamic data through presentation models/adapters;
+6. run the state under the standalone host;
+7. compare it against the known-good BladeDash state;
+8. correct migration regressions before declaring it complete.
 
-The existing Aurora Blade skin is supplementary reference only. It is not authoritative.
+Do not require a Retail 6770 screenshot before reusing a state that BladeDash already defines.
 
 ---
 
-# 7. Required fidelity dimensions
+# 7. Reference-gap rule
 
-Each recreated state must be evaluated against the original for all applicable dimensions below.
+A `REFERENCE_GAP` exists only when:
 
-## 7.1 Geometry
+1. BladeDash does not adequately define the required state/behavior;
+2. no explicit owner decision defines it; and
+3. supplemental historical evidence is insufficient.
+
+For a genuine gap, consult Retail 2.0.6770 first.
+
+If Retail 6770 defines the missing piece, reconstruct only that missing piece in a manner compatible with the approved BladeDash frontend.
+
+Do not use a gap in one state as permission to redesign other BladeDash-defined states.
+
+---
+
+# 8. Fidelity dimensions
+
+For BladeDash-defined states, validate the standalone migration across all applicable dimensions.
+
+## Geometry
 
 Verify:
 
-- active blade position;
-- inactive blade edge positions;
-- blade width;
-- blade curvature;
-- separator width;
-- separator curvature;
-- visible left/right tab widths;
-- content-area width;
-- top margins;
-- bottom margins;
-- side margins;
-- row heights;
-- list spacing;
-- panel dimensions;
+- active/inactive blade positions;
+- blade width/curvature;
+- separators and visible blade edges;
+- content bounds;
+- menu origin and row spacing;
 - dialog dimensions;
-- gamercard dimensions;
-- image/art dimensions;
-- controller legend location;
+- image/art bounds;
+- controller legend positions;
 - safe-area behavior.
 
-## 7.2 Typography
+## Typography
 
 Verify:
 
-- font family or the closest redistributable/locally available equivalent required by the runtime;
-- size;
-- weight;
+- font selection;
+- size/weight;
 - capitalization;
-- line spacing;
-- baseline;
-- letter spacing where observable;
+- baseline and spacing;
 - alignment;
-- truncation behavior;
-- wrapping behavior;
-- highlight/selected text behavior;
-- disabled text behavior.
+- truncation/wrapping;
+- selected/disabled text behavior.
 
-## 7.3 Color and surface treatment
+## Surface treatment
 
 Verify:
 
-- blade base colors;
+- colors;
 - gradients;
-- gloss layers;
-- metallic/silver separators;
-- highlight colors;
-- transparency;
-- translucency;
-- blur-like treatment where reproducible;
-- shadows;
-- background brightness;
-- selected-state brightness;
-- disabled-state brightness;
-- overlay dimming.
+- gloss;
+- metallic separators;
+- transparency/alpha;
+- highlights;
+- shadows/effects;
+- selected/disabled brightness.
 
-Do not derive final colors from screenshots captured through unknown post-processing when a cleaner reference is available.
-
-## 7.4 Icons and imagery
-
-Verify:
-
-- visual size;
-- position;
-- aspect ratio;
-- crop;
-- selected state;
-- disabled state;
-- animation state;
-- relationship to text.
-
-Do not place copyrighted Microsoft assets in public release packages unless the project owner separately establishes redistribution rights.
-
-## 7.5 Navigation
+## Navigation
 
 Verify:
 
 - horizontal blade switching;
-- vertical list movement;
+- vertical movement;
 - initial focus;
-- focus persistence;
+- focus persistence/restoration;
 - wrap/no-wrap behavior;
-- A/confirm behavior;
-- B/back behavior;
-- X/Y behavior where present;
-- shoulder/trigger behavior where present;
-- Guide-button behavior where implementable;
-- focus restoration when returning from deeper views;
-- full-screen transition behavior.
+- A/B/X/Y behavior;
+- shoulder/trigger behavior where defined;
+- child-view/back behavior.
 
-## 7.6 Motion
+## Motion
 
 Verify:
 
-- animation direction;
-- start position;
-- end position;
+- direction;
+- start/end positions;
 - travel distance;
 - duration;
-- easing profile;
-- relative movement of foreground/background layers;
-- sequencing between blade movement and content refresh;
-- focus transition timing;
-- dialog opening/closing motion;
-- full-screen segue behavior.
+- easing;
+- sequencing;
+- content refresh timing;
+- dialog motion;
+- full-screen transitions.
 
-A generic slide or fade is not acceptable where the original motion is observable.
+## Audio
 
-## 7.7 Audio event timing
+Verify:
 
-Where audio is implemented, verify:
-
-- event trigger;
-- timing relative to motion;
-- one-shot vs repeated behavior;
-- focus-move behavior;
-- confirm behavior;
-- cancel behavior;
-- blade-change behavior;
-- error behavior;
-- notification behavior.
-
-Release packages must use audio that may legally be distributed.
+- focus move;
+- confirm/cancel;
+- blade change;
+- dialog/error events;
+- trigger timing relative to animations.
 
 ---
 
-# 8. Blade architecture rule
+# 9. Stable frontend contract
 
-The UI must be implemented as a real Blade-oriented state architecture, not a set of unrelated pages wearing Blade-colored headers.
+Once a BladeDash-defined state works correctly under the standalone host, freeze its visible/behavioral contract.
 
-Top-level categories share the Blades hierarchy and transition horizontally.
+Backend milestones may change:
 
-Where Retail 6770 keeps neighboring blade edges visible, the recreation must keep them visible.
+- service implementation;
+- data sources;
+- caching;
+- download mechanics;
+- scanner implementation;
+- networking;
+- launch implementation;
+- Title Update logic;
+- persistence.
 
-Where Retail 6770 transitions into a full-screen child view and removes the neighboring blade indicators to reclaim space, the recreation must do the same.
-
-Do not force all screens into one visual template.
-
----
-
-# 9. Full-screen legacy-view rule
-
-Some original Blades views transition away from the constrained top-level blade layout and use more of the display area.
-
-Examples documented in historical references include game/library and storage-style deeper views.
-
-Codex must reproduce the specific 6770 behavior of each screen.
-
-The existence of visible side blades on the main dashboard does **not** authorize keeping them visible on every child screen.
+They must not change the approved frontend contract unless the owner explicitly authorizes it.
 
 ---
 
-# 10. Marketplace fusion rule
+# 10. Backend adaptation rule
 
-The Marketplace frontend must look and behave like the Retail 6770 Marketplace experience to the maximum extent technically possible.
+Canonical architecture:
 
-The backend is the existing ConsoleCrate / CCLOS Marketplace infrastructure.
+```text
+BladeDash XUI/XUR frontend
+        |
+FSD/Blade compatibility facade
+        |
+Blade presentation models
+        |
+Blade adapters
+        |
+Shared ConsoleCrate/CCLOS-derived services
+        |
+Xbox 360 platform APIs
+```
 
-Required architecture:
+The backend adapts to BladeDash.
+
+BladeDash must not be visually reshaped to accommodate CCLOS/backend terminology or schemas.
+
+---
+
+# 11. Marketplace fusion rule
+
+The existing BladeDash Marketplace-facing presentation is authoritative wherever present.
+
+Backend:
 
 ```text
 ConsoleCrate Marketplace Services
               |
-              v
 BladeMarketplaceAdapter
               |
-              v
-Retail-6770-compatible UI model
+BladeDash-compatible presentation model
               |
-              v
-Blades Marketplace XUI
+Existing BladeDash XUI
 ```
 
-The service adapts to the UI.
+Do not expose CCLOS cards, CCLOS navigation, REST concepts, server paths, API terminology, or CCLOS download-manager visuals through the Blade frontend.
 
-The UI does not visibly adapt to the modern service.
-
-Do not expose CCLOS card layouts, CCLOS navigation, modern REST concepts, server filenames, internal API terminology, or modern download-manager visuals through the Blade frontend.
+If BladeDash lacks a required Marketplace state, consult Retail 6770 as supplemental historical evidence for that missing state only.
 
 ---
 
-# 11. Standalone rule
+# 12. Standalone rule
 
-The final dashboard must not require Aurora.
+The final dashboard must not require Freestyle Dash, Aurora, or the CCLOS application.
 
-It must not depend on:
+It must own or link standalone service implementations for lifecycle, scene hosting, input, game discovery, launching, settings, network/filesystem operations, Marketplace, downloads, Title Updates, and other retained features.
 
-- Aurora scenes;
-- Aurora skin APIs;
-- Aurora navigation;
-- Aurora database schemas;
-- Aurora metadata exposure;
-- Aurora launch behavior;
-- Aurora UI events.
-
-The old Aurora Blade skin may be inspected for project history and useful measurements but must not become the runtime foundation.
+The new XEX replaces the old host. It does not replace the approved frontend.
 
 ---
 
-# 12. XUI/XuiTool rule
+# 13. XUI/XuiTool rule
 
-XUI is the preferred UI implementation technology where appropriate for the Xbox 360 target.
+Codex must inspect the local Xbox 360 XDK/XUI environment and use the actual supported XuiTool/XUI workflow.
 
-Codex must inspect the local development environment and document:
+Test the supplied `skin.xui` and existing XUR resources directly before declaring any resource unusable or generating a replacement.
 
-- installed XDK location;
-- XuiTool location;
-- usable XUI authoring/build tools;
-- compiler/linker path;
-- XDK include paths;
-- XDK library paths;
-- XEX packaging workflow;
-- any repeatable command-line operations available for XUI/XUR generation.
+Do not invent undocumented XuiTool CLI options.
 
-Codex should automate repeatable build steps wherever technically possible.
-
-Codex must **not assume** XuiTool has an undocumented CLI interface. If a GUI-only step remains necessary, document that step exactly and isolate it so the rest of the build remains reproducible.
-
-Do not commit proprietary XDK binaries to this repository.
+Do not commit proprietary XDK binaries.
 
 ---
 
-# 13. Clean-room / redistribution boundary
+# 14. Migration comparison requirement
 
-The canonical archive contains original Microsoft dashboard binaries/resources. Those files may be useful for historical identification and local reference, but they are not project source.
-
-The public repository and distributable release must not include or require:
-
-- `dash.xex` from the Microsoft dashboard;
-- Microsoft dashboard executable code;
-- extracted Microsoft source code;
-- proprietary Microsoft XDK redistributables that cannot legally be shared;
-- original proprietary resource packages such as `shrdres.xzp` unless redistribution permission is independently established;
-- copied Microsoft copyrighted artwork/audio where redistribution is not permitted.
-
-The implementation must use newly written application code.
-
-Visual fidelity may be achieved through newly authored resources, runtime-generated geometry/effects, and developer-local comparison material that is not distributed.
-
-Do not decompile or copy original executable implementation into project source.
-
----
-
-# 14. Side-by-side validation requirement
-
-Every major state must eventually support visual validation using two captures under equivalent output settings:
+For major BladeDash-defined states, compare:
 
 ```text
-Original Retail 6770 capture
-            +
-Recreated dashboard capture
-            |
-            v
-Scale/align to common canvas
-            |
-            +--> 50/50 overlay
-            +--> blink comparison
-            +--> difference image
-            +--> edge/alignment inspection
+Known-good BladeDash(2005) under the working host
+                        +
+Standalone BladeDashboard.xex state
+                        |
+                        v
+             equivalent capture conditions
+                        |
+                        +--> side-by-side
+                        +--> overlay when useful
+                        +--> difference inspection
+                        +--> behavior/timing notes
 ```
 
-A fidelity helper may calculate difference metrics, but numeric scores do not replace human review.
+Retail 6770 comparison is optional supplemental research for these states and cannot overrule the approved skin.
 
-Comparison captures must use equivalent:
-
-- resolution;
-- aspect ratio;
-- overscan/safe-area assumptions;
-- screen state;
-- selected item;
-- data population where possible;
-- animation frame when comparing motion states.
+For a state absent from BladeDash, use Retail 6770 comparison as appropriate for that newly reconstructed state.
 
 ---
 
-# 15. Fidelity severity levels
+# 15. Severity levels
 
-Log discrepancies using:
+Log migration discrepancies as:
 
-- **F0 BLOCKER** — wrong screen structure, wrong blade geometry, wrong hierarchy, obvious modern redesign, incorrect major color, missing canonical element.
-- **F1 MAJOR** — visibly wrong position/size, wrong font scale, wrong animation behavior, incorrect selected state, wrong full-screen behavior.
-- **F2 MODERATE** — noticeable spacing, color, alpha, icon-scale, timing, or alignment mismatch.
-- **F3 MINOR** — subtle pixel, anti-aliasing, texture, or timing differences that do not change the overall read.
+- **F0 BLOCKER** — wrong scene/hierarchy, missing major BladeDash element, replacement UI where reusable UI exists, broken navigation, major host-caused visual change.
+- **F1 MAJOR** — visibly wrong geometry, font scale, animation, selected state, transition, or audio timing.
+- **F2 MODERATE** — noticeable spacing, color, alpha, icon scale, timing, or alignment mismatch.
+- **F3 MINOR** — subtle rendering/anti-aliasing/texture/timing differences.
 
-No screen may be marked fidelity-complete with open F0 or F1 discrepancies.
-
-F2 issues must be resolved unless a documented technical limitation prevents it.
-
-F3 issues may remain only when documented and approved.
+No BladeDash-defined screen may be marked migration-fidelity-complete with open F0 or F1 discrepancies.
 
 ---
 
-# 16. Change-control rule
+# 16. Change control
 
-Once a screen/state passes its fidelity gate:
+Once a state passes migration fidelity:
 
-- freeze its visual contract;
-- do not refactor it into a visibly different layout;
+- freeze its presentation contract;
 - do not modernize it during backend work;
-- do not alter animation timing without a new reference finding;
-- do not change colors because another screen uses a different value;
-- do not normalize historical inconsistencies.
-
-A later backend milestone may change data plumbing without changing the approved visible state.
+- do not change animation timing without an owner-approved reason;
+- do not change colors/layout because a Retail screenshot differs;
+- do not normalize existing BladeDash inconsistencies;
+- rerun regression checks when shared rendering/navigation code changes.
 
 ---
 
-# 17. No assumption rule
+# 17. Status labels
 
-When Codex encounters ambiguity, it must not silently guess.
+Use these project states:
 
-Use one of these documented states:
+- `BLADEDASH_DEFINED` — approved skin defines the state/behavior.
+- `BLADEDASH_MIGRATION_VERIFIED` — standalone host matches the approved skin.
+- `BLADEDASH_GAP_RETAIL_6770` — BladeDash lacks the state and Retail 6770 supplies evidence.
+- `REFERENCE_GAP` — BladeDash and available supplemental references do not define it.
+- `TECHNICAL_LIMITATION` — platform/runtime prevents exact preservation.
+- `OWNER_DECISION_REQUIRED` — an explicit design/scope choice is needed.
 
-- `CONFIRMED_6770`
-- `CONFIRMED_NEARBY_BUILD_UNCHANGED`
-- `REFERENCE_GAP`
-- `TECHNICAL_LIMITATION`
-- `OWNER_DECISION_REQUIRED`
-
-For implementation work that can continue without the missing fact, leave a placeholder behind the canonical geometry rather than inventing new UI.
+Do not use `REFERENCE_GAP` merely because Retail 6770 evidence has not been collected for a state that BladeDash already defines.
 
 ---
 
 # 18. Definition of fidelity-complete
 
-A state is not complete because it compiles or navigates.
+For a BladeDash-defined state:
 
-A state is fidelity-complete only after all applicable items are true:
-
-- [ ] Canonical Retail 6770 reference identified.
-- [ ] Geometry documented.
-- [ ] Blade boundaries match.
-- [ ] Typography matches.
-- [ ] Colors/gradients/transparency match.
-- [ ] Icon/image placement matches.
-- [ ] Initial focus matches.
-- [ ] Controller navigation matches.
-- [ ] Selected/focused/disabled states match.
-- [ ] Transition direction matches.
-- [ ] Transition duration/easing has been measured or visually matched.
-- [ ] Full-screen vs blade-edge behavior matches.
-- [ ] Recreated capture produced.
-- [ ] Side-by-side comparison completed.
-- [ ] Overlay/difference comparison completed where practical.
+- [ ] Approved BladeDash resource/state identified.
+- [ ] Existing presentation reused wherever technically possible.
+- [ ] Required FSD host contract identified/replaced.
+- [ ] Geometry matches the known-good BladeDash state.
+- [ ] Typography placement matches.
+- [ ] Colors/effects match.
+- [ ] Focus/controller behavior matches.
+- [ ] Navigation hierarchy matches.
+- [ ] Transition/animation behavior matches.
+- [ ] Audio event timing matches where retained.
+- [ ] Dynamic backend data does not alter the visible contract.
+- [ ] Standalone capture/test produced.
 - [ ] No F0 issues remain.
 - [ ] No F1 issues remain.
-- [ ] Remaining F2/F3 differences are documented.
-- [ ] Backend data, if connected, does not alter the visual contract.
+- [ ] Remaining F2/F3 issues are documented.
+
+For a state absent from BladeDash, document the gap and use Retail 6770 evidence under `AUTHORITY_HIERARCHY.md`.
 
 ---
 
 # 19. Final acceptance standard
 
-The project is considered successful only when the complete dashboard can be evaluated as a **Retail 6770 recreation**, not merely as a homebrew dashboard with a Blades theme.
+The project succeeds when the approved BladeDash frontend behaves under the standalone XEX as it did under its known-good host while gaining the required standalone ConsoleCrate/CCLOS-backed functionality.
 
-Functional additions are valuable only when they remain visually subordinate to the original interface contract.
-
-**The reference wins. Fidelity first. Backend second. Creative reinterpretation is not permitted.**
+**BladeDash(2005) wins. Retail 6770 fills gaps. Backend implementation must remain subordinate to the approved frontend contract.**
