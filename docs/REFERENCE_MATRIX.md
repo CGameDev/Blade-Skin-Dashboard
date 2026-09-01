@@ -2,25 +2,26 @@
 
 ## Purpose
 
-This file tracks where the approved `BladeDash(2005)` package already defines the product frontend and where supplemental historical research is actually needed.
+This file tracks where the approved `BladeDash(2005)` package already defines the product frontend, which standalone service replaces each FSD-era host dependency, and where supplemental historical research is actually needed.
 
 **Do not block implementation of a BladeDash-defined state merely because a Retail 6770 screenshot has not been collected.**
 
-Authority is defined by `docs/AUTHORITY_HIERARCHY.md`.
+Authority is defined by `docs/AUTHORITY_HIERARCHY.md`. Product/scope choices are defined by `docs/OWNER_DECISIONS.md`.
 
 ---
 
-# Reference status labels
+# Reference/status labels
 
 - `BLADEDASH_DEFINED` — approved skin directly defines the state/behavior/presentation.
 - `BLADEDASH_MIGRATION_VERIFIED` — standalone host reproduces the approved state/behavior.
-- `BLADEDASH_PARTIAL` — approved skin defines part of the state, but some host behavior/details require additional evidence.
+- `BLADEDASH_PARTIAL` — approved skin defines part of the state, but host behavior/details require additional implementation/evidence.
 - `BLADEDASH_GAP_RETAIL_6770` — BladeDash does not define the required state and confirmed Retail 6770 evidence supplies it.
-- `CONFIRMED_NEARBY_BUILD_UNCHANGED` — nearby Retail Blades build used only for a genuine BladeDash gap with evidence of equivalence.
-- `STRUCTURAL_REFERENCE_ONLY` — useful for hierarchy/behavior clues only.
-- `REFERENCE_GAP` — BladeDash, owner decisions, and available historical evidence do not adequately define the required state.
+- `CONSOLECRATE_BACKED` — retained BladeDash feature has an owner-approved ConsoleCrate/CCLOS backend direction.
+- `PLATFORM_BACKED` — retained BladeDash feature is implemented primarily through Xbox/platform services.
+- `SERVICE_EVALUATION` — BladeDash defines the UI but the original external service is obsolete/uncertain and a real replacement must be evaluated.
+- `REFERENCE_GAP` — BladeDash, owner decisions and available historical evidence do not define the required presentation/behavior.
 - `TECHNICAL_LIMITATION` — exact behavior cannot currently be reproduced because of platform/runtime constraints.
-- `OWNER_DECISION_REQUIRED` — scope/design choice must come from the project owner.
+- `OWNER_DECISION_REQUIRED` — a product/scope choice not already resolved in `OWNER_DECISIONS.md` is required.
 - `NOT_APPLICABLE` — outside retained standalone scope.
 
 ---
@@ -45,18 +46,7 @@ Expected extraction:
 references/local/BladeDash(2005)/
 ```
 
-For any state/resource present here, BladeDash is the authority.
-
-Useful package evidence includes:
-
-- `skin.xui`;
-- compiled `.xur` scenes;
-- XML configuration;
-- XMA audio;
-- textures/DDS resources;
-- fonts;
-- meshes/shaders;
-- running behavior under the known-good host.
+For any state/resource present here, BladeDash is the visual/behavioral authority.
 
 ---
 
@@ -70,52 +60,53 @@ Historical archive:
 
 Boundary: original Microsoft binaries/resources are historical reference only and are not project runtime/source dependencies.
 
-Structural reference when needed:
-
-`https://github.com/flipacholas/Architecture-of-consoles/blob/master/articles/xbox-360.Rmd.md`
-
 ---
 
-# Initial BladeDash inventory matrix
+# Owner-resolved feature matrix
 
-Codex must replace these initial classifications with exact scene/resource paths and compatibility status during Milestone 000.
+Codex must replace initial resource guesses with exact scene/control paths and compatibility status during Milestone 000.
 
-| ID | Area | State / contract | Initial authority | Migration / research action |
+| ID | Area | BladeDash state/feature | Frontend authority | Standalone direction |
 |---|---|---|---|---|
-| ROOT-001 | Root | Main dashboard shell | BLADEDASH_DEFINED | Locate `main.xur`/corresponding `skin.xui` resources and reproduce under standalone host. |
-| ROOT-002 | Root | Splash/loading presentation | BLADEDASH_DEFINED | Reuse existing splash/loading resources and preserve event timing. |
-| BLADE-001 | Navigation | Horizontal Blade navigation | BLADEDASH_DEFINED | Preserve existing timelines/focus behavior; identify FSD host events. |
-| BLADE-002 | Navigation | Active/inactive blade geometry | BLADEDASH_DEFINED | Use existing XUI geometry; do not remeasure from Retail screenshots unless resource becomes unusable. |
-| GAME-001 | Games | Game list/browse presentation | BLADEDASH_DEFINED | Map `GamesList`/related contracts to Blade library adapter. |
-| GAME-002 | Games | Game detail/info | BLADEDASH_DEFINED | Inventory `gameinfo.xur` and related actions. |
-| GAME-003 | Games | Game controls/actions | BLADEDASH_DEFINED | Inventory `GameControls.xur`; map launch/action contracts. |
-| ACH-001 | Achievements | Achievements UI | BLADEDASH_DEFINED | Inventory `Achievements.xur`; implement `AchievementManager` compatibility. |
-| TU-001 | Title Updates | Title Update manager | BLADEDASH_DEFINED | Inventory `TitleUpdateManager.xur`; map to shared Title Update service. |
-| SAVE-001 | Saved Games | Saved-game view | BLADEDASH_DEFINED | Inventory `savedgames.xur`; determine retained functionality. |
-| TRAIN-001 | Trainers | Trainer scene | BLADEDASH_DEFINED | Inventory `Trainers.xur`; retain only if in final standalone scope. |
-| DVD-001 | Disc | Copy DVD scene | BLADEDASH_DEFINED | Inventory `CopyDVD.xur`; determine standalone service mapping. |
-| FILE-001 | Files | File/path manager family | BLADEDASH_DEFINED | Map file/path list contracts to standalone filesystem services. |
-| PROF-001 | Profile | Profile/gamercard/avatar presentation | BLADEDASH_DEFINED | Map `ScnProfile`/avatar contracts to available Xbox/profile services. |
-| SYS-001 | System | System information/settings | BLADEDASH_DEFINED | Map `ScnSysInfo`/settings contracts to platform services. |
-| MEDIA-001 | Media | Music/video/media scenes | BLADEDASH_DEFINED | Inventory retained scenes and service requirements. |
-| WEATHER-001 | Weather | Weather scene | BLADEDASH_DEFINED | Decide retained scope/service viability without redesigning scene. |
+| ROOT-001 | Root | Main dashboard shell | BLADEDASH_DEFINED | Reuse `main.xur`/corresponding XUI; standalone host owns lifecycle/navigation. |
+| ROOT-002 | Root | Splash/loading presentation | BLADEDASH_DEFINED | Reuse existing splash/loading resources and timing. No CCLOS OOBE. |
+| BLADE-001 | Navigation | Horizontal Blade navigation | BLADEDASH_DEFINED | Preserve timelines/focus behavior; replace FSD host events only. |
+| BLADE-002 | Navigation | Active/inactive blade geometry | BLADEDASH_DEFINED | Use existing geometry; do not redraw from Retail screenshots. |
+| GAME-001 | Games | Game list/browse | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | `GamesList` -> Blade library adapter -> CCLOS/ConsoleCrate game discovery. |
+| GAME-002 | Games | Game detail/info | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing `gameinfo` presentation -> metadata/cache/launch adapters. |
+| GAME-003 | Games | Game controls/actions | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing controls -> standalone/CCLOS launch and action services. |
+| ACH-001 | Achievements | Achievements UI | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing Achievements UI -> BladeAchievementAdapter -> CCLOS/Xbox achievement service. |
+| TU-001 | Title Updates | Title Update manager | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing TU UI -> BladeTitleUpdateAdapter -> CCLOS Title Update service. |
+| TRAIN-001 | Trainers | Trainer scene | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing Trainers UI -> BladeTrainerAdapter -> CCLOS trainer/runtime handling. |
+| DVD-001 | Disc | CopyDVD scene | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing `CopyDVD` UI -> BladeDiscCopyAdapter -> CCLOS Disc-to-GOD service. |
+| SAVE-001 | Saved Games | Saved-game view | BLADEDASH_DEFINED + PLATFORM_BACKED | Preserve existing UI; implement through available Xbox storage/content services. |
+| FILE-001 | Files | File/path manager family | BLADEDASH_DEFINED + PLATFORM_BACKED | Existing file/path UI -> filesystem adapters + reusable ConsoleCrate filesystem logic. |
+| PROF-001 | Profile | Profile/gamercard/avatar | BLADEDASH_DEFINED + PLATFORM_BACKED | Existing UI -> Xbox profile/platform services + reusable CCLOS helpers where applicable. |
+| SYS-001 | System | System information/settings | BLADEDASH_DEFINED + PLATFORM_BACKED | Existing UI -> Xbox platform/system services. |
+| NET-001 | Network | Network/status/settings | BLADEDASH_DEFINED/PARTIAL + PLATFORM_BACKED | Preserve existing Blade state; map to standalone network service. Retail 6770 only for a genuinely absent presentation detail. |
+| COVER-001 | CoverFlow | CoverFlow presentation | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Preserve meshes/shaders/UI; feed library/artwork through adapters. |
+| MARKET-001 | Marketplace | Marketplace-facing state(s) | BLADEDASH_DEFINED/PARTIAL + CONSOLECRATE_BACKED | Existing Blade Marketplace hierarchy -> BladeMarketplaceAdapter -> ConsoleCrate Marketplace. Visible name remains `Marketplace`. |
+| DOWNLOAD-001 | Downloads | Download/progress state(s) | BLADEDASH_DEFINED/PARTIAL + CONSOLECRATE_BACKED | Blade presentation -> BladeDownloadAdapter -> CCLOS queue/high-throughput download pipeline. |
+| MEDIA-001 | Media | Existing Media / Media Center UI | BLADEDASH_DEFINED | **Frozen presentation. Must not be visually redesigned.** |
+| MEDIA-002 | Media | Watch TV functionality | BLADEDASH_DEFINED frontend pattern + CONSOLECRATE_BACKED | Existing Blade Media Center -> BladeMediaAdapter -> CCLOS Watch TV/media services. Use existing list/menu/control geometry only. |
 | POPUP-001 | Dialogs | Popup/dialog family | BLADEDASH_DEFINED | Preserve existing dialog presentation; map `ScnPopup` behavior. |
-| COVER-001 | CoverFlow | CoverFlow presentation | BLADEDASH_DEFINED | Inventory meshes/shaders/resources and FSD host bindings. |
-| HTTP-001 | Web/HTTP | HTTP server/web-facing settings | BLADEDASH_DEFINED | Determine retained scope and host-service replacement. |
-| MARKET-001 | Marketplace | Marketplace-facing state(s) | BLADEDASH_PARTIAL | First inventory what BladeDash actually contains; use ConsoleCrate adapter. Consult Retail 6770 only for missing states. |
-| NET-001 | Network | Network-facing state(s) | BLADEDASH_PARTIAL | Use existing skin state where present; Retail 6770 only for absent required presentation. |
-| GUIDE-001 | Guide | Guide/overlay behavior | BLADEDASH_PARTIAL | Determine what package defines vs platform limitation. Use historical evidence only for missing portion. |
+| HTTP-001 | Web/HTTP | HTTP server/web-facing settings | BLADEDASH_DEFINED + SERVICE_EVALUATION | Retain only with a real standalone service; never leave dead FSD-era endpoints. |
+| WEATHER-001 | Weather | Weather scene | BLADEDASH_DEFINED + SERVICE_EVALUATION | Preserve UI; implement only if a real replacement service is available/approved. Otherwise use existing unavailable behavior or owner decision. |
+| LEGACY-NET-001 | Legacy network | Xlink Kai/JQE-era functions | BLADEDASH_DEFINED + SERVICE_EVALUATION | Evaluate real replacement. Do not fake or revive dead services merely for completeness. |
+| PLUGIN-001 | Plugins/updater | FSD-era plugin/update functions | BLADEDASH_DEFINED + SERVICE_EVALUATION | Evaluate real standalone replacement; no dead calls. |
+| GUIDE-001 | Guide | Guide/overlay behavior | BLADEDASH_PARTIAL | Determine package-defined behavior vs platform technical limits; Retail evidence only for missing portion. |
 
 ---
 
-# Required per-state record
+# Required per-state implementation record
 
-For each retained state, add or update a record containing:
+For each retained state, add/update:
 
 ```text
 State ID:
 BladeDash scene/resource:
 BladeDash authority status:
+Owner scope status:
 Known-good runtime capture/path:
 Relevant skin.xui resource/control IDs:
 Expected FSD host contract(s):
@@ -127,6 +118,7 @@ Audio-event references:
 Standalone facade:
 Blade adapter:
 Underlying service:
+CCLOS provenance entry:
 Migration status:
 Technical limitations:
 Genuine missing details:
@@ -137,24 +129,25 @@ Open fidelity issues:
 
 ---
 
-# Evidence collection rules
+# Evidence and scope rules
 
 1. Start with the approved BladeDash package and known-good running behavior.
-2. Do not search Retail 6770 first for a state already defined by BladeDash.
-3. Do not mark a state `REFERENCE_GAP` merely because historical screenshots are missing.
-4. If a BladeDash state is incomplete, identify the exact missing portion before historical research.
-5. Use Retail 6770 only for that missing portion.
-6. Nearby builds are lower-priority evidence for genuine gaps only.
-7. Generated mockups are never authoritative evidence.
-8. Do not silently replace BladeDash behavior because another historical source differs.
-9. Keep non-redistributable captures/resources developer-local and record metadata/path placeholders in Git.
-10. Migration comparison should use equivalent BladeDash original-host and standalone-host states whenever possible.
+2. Start with `OWNER_DECISIONS.md` before asking the owner whether a listed feature is retained.
+3. Do not search Retail 6770 first for a state already defined by BladeDash.
+4. Do not mark a state `REFERENCE_GAP` because historical screenshots are missing when BladeDash defines it.
+5. For retained FSD-era features, first look for a real ConsoleCrate/CCLOS Core or Xbox platform replacement.
+6. CopyDVD, Achievements, Title Updates and Trainers are explicitly retained and mapped to CCLOS-backed functionality.
+7. Watch TV is explicitly retained as functionality beneath the **unchanged Blade Media Center presentation**.
+8. Do not import CCLOS Watch TV/Marketplace/Downloads UI.
+9. For obsolete services with no real replacement, do not fake behavior or leave dead calls.
+10. Keep non-redistributable captures/resources developer-local and record metadata/path placeholders in Git.
+11. Record exact CCLOS source commit provenance for reused backend subsystems in `BACKEND_PROVENANCE.md`.
 
 ---
 
 # Milestone 000 required inventory pass
 
-Before substantial new UI is created, Codex must inventory and classify:
+Before substantial new UI is created, Codex must inventory/classify:
 
 - all `.xur` scenes;
 - relevant `skin.xui` resources;
@@ -163,14 +156,11 @@ Before substantial new UI is created, Codex must inventory and classify:
 - navigation/event bindings;
 - animation timelines;
 - audio triggers;
-- retained vs optional features.
+- owner-retained service mappings;
+- obsolete services requiring evaluation.
 
 Then create/update `docs/FSD_COMPATIBILITY_MATRIX.md`.
 
-The purpose of research is now to **fill specific gaps**, not to recreate the existing BladeDash frontend from scratch.
+## Final rule
 
----
-
-# Final rule
-
-**BladeDash-defined states are already referenced. Retail 6770 research begins only where BladeDash ends.**
+**BladeDash-defined states are already referenced. Owner-retained features keep their Blade face and receive real ConsoleCrate/CCLOS/Xbox functionality underneath. Retail 6770 research begins only where BladeDash and owner decisions end.**
