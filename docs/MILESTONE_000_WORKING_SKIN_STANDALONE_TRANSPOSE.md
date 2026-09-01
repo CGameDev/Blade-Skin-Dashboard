@@ -10,9 +10,9 @@ Codex must complete this milestone before any new Blade UI reconstruction work.
 
 ## Objective
 
-Use the developer-approved `BladeDash(2005)` Freestyle 3/FSD skin as the **product frontend and absolute visual/behavioral authority** for the standalone Xbox 360 Blade dashboard.
+Use the developer-approved `BladeDash(2005)` Freestyle 3/FSD skin as the **product frontend and absolute visual/behavioral authority** for the standalone Xbox 360 **Blade Dashboard**.
 
-Preserve its working XUI/XUR presentation and behavior wherever technically possible. Replace the FSD host/runtime dependencies with newly owned standalone runtime code plus Blade-specific adapters backed by proven ConsoleCrate/CCLOS services.
+Preserve its working XUI/XUR presentation and behavior wherever technically possible. Replace FSD host/runtime dependencies with newly owned standalone runtime code plus Blade-specific adapters backed by proven ConsoleCrate/CCLOS services and Xbox 360 platform APIs.
 
 The desired result is the existing approved BladeDash implementation running on top of a new standalone dashboard host.
 
@@ -20,20 +20,22 @@ Retail Xbox 360 Blades build 2.0.6770 is supplemental historical reference only 
 
 ---
 
-# 0. Mandatory authority and source baseline
+# 0. Mandatory authority and owner decisions
 
 Read first:
 
 1. `README.md`
-2. `docs/AUTHORITY_HIERARCHY.md`
-3. `docs/WORKING_SKIN_BASELINE.md`
-4. `docs/MILESTONE_000_WORKING_SKIN_STANDALONE_TRANSPOSE.md`
-5. `docs/SHARED_CORE_ARCHITECTURE.md`
-6. `docs/FIDELITY_DIRECTIVE.md`
-7. `docs/CODEX_EXECUTION_RULES.md`
-8. `docs/REFERENCE_MATRIX.md`
+2. `AGENTS.md`
+3. `docs/AUTHORITY_HIERARCHY.md`
+4. `docs/OWNER_DECISIONS.md`
+5. `docs/WORKING_SKIN_BASELINE.md`
+6. `docs/MILESTONE_000_WORKING_SKIN_STANDALONE_TRANSPOSE.md`
+7. `docs/SHARED_CORE_ARCHITECTURE.md`
+8. `docs/FIDELITY_DIRECTIVE.md`
+9. `docs/CODEX_EXECUTION_RULES.md`
+10. `docs/REFERENCE_MATRIX.md`
 
-`docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md` is legacy/supplemental scope material only and does not override this milestone.
+`docs/MILESTONE_001_RETAIL_6770_EXACT_REPLICA.md` is retired legacy material and must not be executed.
 
 Expected local seed:
 
@@ -51,7 +53,7 @@ Never silently substitute another skin/package.
 
 ---
 
-# 1. Hard rules
+# 1. Non-negotiable rules
 
 - BladeDash-defined presentation and behavior are authoritative.
 - Do not use Retail 6770 to override a working BladeDash-defined state.
@@ -60,34 +62,74 @@ Never silently substitute another skin/package.
 - Do not use generic colored Blade panels as the production base.
 - Do not redraw geometry already present in the working package.
 - Do not recreate existing animations/timelines from screenshots.
-- Do not replace working XMA audio cues or event timing with guesses.
+- Do not replace working XMA audio cues/event timing with guesses.
 - Do not replace existing scene resources until proven technically incompatible with the standalone host.
 - Do not require Aurora, Freestyle Dash, or CCLOS at runtime.
 - Do not copy CCLOS visual components into Blade.
 - Do reuse ConsoleCrate/CCLOS backend/service logic behind clean Blade adapters.
 - Preserve the approved original package untouched as a golden source.
+- Keep the frontend externally editable/repackable through the verified XUI/XuiTool resource workflow wherever technically possible.
+- Do not leave dead FSD-era service calls in production.
 
 ---
 
-# 2. Phase A — source acquisition and golden copy
+# 2. Owner-approved product identity and deployment
+
+Product name:
+
+**Blade Dashboard**
+
+Application-identifying FSD/Freestyle Dash branding may be replaced with `Blade Dashboard` without changing layout, geometry, navigation or styling.
+
+Default deployment root:
+
+```text
+Hdd1:\Apps\BladeDashboard\
+```
+
+Deployable entrypoint:
+
+```text
+Hdd1:\Apps\BladeDashboard\default.xex
+```
+
+Blade-owned state is stored independently of CCLOS beneath the application root, conceptually:
+
+```text
+Config\
+Cache\
+Data\
+Logs\
+Skins\
+```
+
+No new CCLOS-style OOBE is to be created. First launch initializes required local state and enters the approved BladeDash presentation.
+
+Do not automatically edit `launch.ini`; document DashLaunch setup instead unless the owner later changes this rule.
+
+Primary v1 acceptance display mode: **16:9 HD / 720p**.
+
+---
+
+# 3. Phase A — source acquisition and golden copy
 
 ## Tasks
 
-- locate the ZIP in the developer-local repository workspace;
-- calculate SHA-256 and compare to the approved fingerprint;
+- locate the approved ZIP;
+- calculate SHA-256 and verify the approved fingerprint;
 - extract into `references/local/BladeDash(2005)/` without flattening paths;
 - create an immutable/golden copy or verified backup;
-- generate a local manifest/hash inventory for important resources;
-- record extraction status in `docs/CHECKPOINT_STATUS.md`;
+- generate a local manifest/hash inventory;
+- record extraction status;
 - do not alter the approved ZIP.
 
 ## Gate A
 
-Do not proceed if the hash differs unless the project owner intentionally supplied a newer baseline.
+Do not proceed if the hash differs unless the owner intentionally supplied a newer baseline.
 
 ---
 
-# 3. Phase B — XDK/XuiTool validation using the actual skin
+# 4. Phase B — XDK/XuiTool and external-resource validation
 
 Codex must test the real approved package, not a synthetic replacement UI.
 
@@ -98,21 +140,75 @@ Codex must test the real approved package, not a synthetic replacement UI.
 - open/test `skin.xui` using the verified local workflow;
 - determine whether local tools can inspect/edit individual `.xur` files;
 - determine supported compile/repack path from editable XUI to runtime resources;
-- verify image, DDS, XMA, font, shader, and mesh resource resolution;
+- verify image, DDS, XMA, font, shader and mesh resource resolution;
 - document any resource that fails to load;
-- never invent command-line flags.
+- determine the best externally editable runtime packaging strategy.
+
+Preferred resource strategy:
+
+1. external editable/repackable XZP/skin package if supported cleanly;
+2. otherwise external extracted resource directory;
+3. embed only resources proven impossible/unsafe to load externally.
+
+Do not invent XuiTool command-line flags.
 
 ## Gate B
 
-Codex must demonstrate that it can open/edit or otherwise consume the existing approved presentation resources before generating replacement UI.
+Codex demonstrates that the existing presentation can be consumed and kept externally maintainable before generating replacement UI.
 
 ---
 
-# 4. Phase C — BladeDash/FSD dependency and contract map
+# 5. Phase C — previous-work audit and CCLOS provenance
+
+## Previous-work audit
+
+Keep reusable work such as:
+
+- XEX/build foundation;
+- XDK build scripts;
+- HTTP/network services;
+- filesystem utilities;
+- launch helpers;
+- ConsoleCrate adapters;
+- parsing/cache logic;
+- tests;
+- diagnostics;
+- background/performance infrastructure.
+
+Discard/quarantine UI that competes with the approved BladeDash presentation unless it solves a proven missing state.
+
+Create/update:
+
+```text
+docs/LEGACY_ATTEMPT_AUDIT.md
+```
+
+## Authoritative CCLOS source
+
+Use:
+
+```text
+CGameDev/ConsoleCrateLive
+branch: main
+```
+
+Before reusing/porting backend code, record the exact source commit SHA in:
+
+```text
+docs/BACKEND_PROVENANCE.md
+```
+
+Do not use backup repositories as implementation authority unless explicitly directed.
+
+Treat the CCLOS repository as a source/reference for proven services; do not casually modify it while building Blade.
+
+---
+
+# 6. Phase D — BladeDash/FSD dependency and contract map
 
 ## Goal
 
-Determine exactly what the approved frontend expects Freestyle Dash to provide.
+Determine exactly what the approved frontend expects FSD to provide.
 
 Starting host concepts include:
 
@@ -133,14 +229,12 @@ Starting host concepts include:
 - `ScnTeamFSD`
 - `ScnWeather`
 
-## Tasks
-
-For every relevant `.xur`, XML config, and `skin.xui` resource:
+For every relevant `.xur`, XML config and `skin.xui` resource:
 
 - identify scene/control IDs;
 - identify expected data fields;
 - identify event/button actions;
-- identify scene transitions;
+- identify transitions;
 - identify list/data-source population points;
 - identify service calls implied by the scene;
 - identify presentation-only resources;
@@ -163,19 +257,17 @@ Recommended classifications:
 - `DEFERRED`
 - `UNKNOWN`
 
-## Gate C
-
-Do not replace a scene merely because its host contract is not yet implemented. Record and satisfy the contract where practical.
+Do not replace a scene merely because its host contract is not yet implemented.
 
 ---
 
-# 5. Phase D — standalone XEX host foundation
+# 7. Phase E — standalone XEX proof of architecture
 
 ## Goal
 
 Create the smallest standalone Xbox 360 application capable of initializing XUI and hosting an existing BladeDash resource.
 
-## Required owned components
+Required owned components:
 
 - application entry point;
 - graphics/XUI initialization;
@@ -184,28 +276,24 @@ Create the smallest standalone Xbox 360 application capable of initializing XUI 
 - scene navigation host;
 - logging;
 - settings/filesystem path abstraction;
-- background-task abstraction appropriate for Xbox 360;
-- clean shutdown and game-launch handoff.
-
-## First rendering target
+- background-task abstraction;
+- clean shutdown/game-launch handoff.
 
 Do **not** build a replacement Blade menu.
 
-Render an existing resource from the approved package first, then progress to `main.xur`/the main shell.
+First render an existing approved BladeDash resource; then progress to `main.xur`/the main shell.
 
-## Gate D
+## Gate E
 
-A standalone XEX launches and renders an existing BladeDash resource without FSD or Aurora running underneath it.
+`default.xex` launches and renders an existing BladeDash resource without FSD or Aurora underneath it.
 
 This is the most important early proof-of-architecture gate.
 
 ---
 
-# 6. Phase E — FSD compatibility/presentation bridge
+# 8. Phase F — FSD compatibility/presentation bridge
 
-## Goal
-
-Allow the existing approved UI to request data/actions without knowing FSD has been replaced.
+Allow the existing UI to request data/actions without knowing FSD has been replaced.
 
 ```text
 Existing BladeDash scene
@@ -221,7 +309,7 @@ Standalone/shared service
 
 Preserve scene-facing names/semantics where practical rather than rewriting scenes to CCLOS terminology.
 
-## Initial bridge targets
+Initial targets:
 
 - scene lifecycle;
 - tab/blade navigation;
@@ -232,178 +320,188 @@ Preserve scene-facing names/semantics where practical rather than rewriting scen
 - controller legends;
 - sound/transition triggers.
 
-## Gate E
-
-Main Blade navigation runs on the standalone host with no FSD/Aurora dependency and without changing the approved geometry/animations/behavior.
-
----
-
-# 7. Phase F — installed games and launch
-
-## Goal
-
-Connect the approved Games UI to the standalone library/content layer.
-
-Reuse/adapt proven ConsoleCrate/CCLOS backend code for:
-
-- scan paths;
-- TitleID/content classification;
-- installed game discovery;
-- artwork/cache lookup where compatible;
-- launch-path resolution;
-- title launch handoff.
-
-Map data to the fields expected by the BladeDash game presentation. Do not import CCLOS game-card UI.
-
 ## Gate F
 
-At least one real installed title appears in the existing BladeDash presentation and launches successfully.
+Main Blade navigation runs on the standalone host with no FSD/Aurora dependency and without changing approved geometry/animations/behavior.
 
 ---
 
-# 8. Phase G — ConsoleCrate Marketplace integration
+# 9. Phase G — owner-approved feature mapping
 
-## Goal
+## General policy
 
-Connect ConsoleCrate services behind the approved Blade presentation.
+If BladeDash has a frontend feature and ConsoleCrate/CCLOS Core or an owned Xbox platform service can provide real functionality, **retain the Blade feature and replace the old FSD service underneath it**.
 
-Create a `BladeMarketplaceAdapter` or equivalent.
+### Required mappings
+
+| BladeDash frontend | Required backend direction |
+|---|---|
+| Games / game info / controls | ConsoleCrate/CCLOS library, cache/metadata and launch services |
+| Marketplace | ConsoleCrate/CCLOS Marketplace services |
+| Downloads | CCLOS download/queue infrastructure and high-throughput pipeline when available |
+| Title Update Manager | CCLOS Title Update service |
+| Achievements | CCLOS/Xbox achievement service |
+| Trainers | CCLOS trainer/runtime service |
+| CopyDVD | CCLOS Disc-to-GOD service |
+| Profiles/avatar | Xbox platform/profile services + reusable CCLOS logic |
+| File/path manager | Standalone filesystem + reusable ConsoleCrate logic |
+| Storage/system/network | Xbox platform APIs + reusable service logic |
+| CoverFlow | Existing Blade presentation + library/artwork adapters |
+| Saved Games | Existing Blade presentation + Xbox storage/content services where practical |
+
+### Unsupported/obsolete services
+
+If an original external FSD-era service is obsolete and no real replacement exists:
+
+- do not fake a backend;
+- do not redesign surrounding UI;
+- preserve presentation where practical;
+- use an existing Blade disabled/unavailable state when available;
+- otherwise record `OWNER_DECISION_REQUIRED` before creating new visible behavior;
+- never leave a dead service call.
+
+---
+
+# 10. Phase H — Media Center + Watch TV
+
+## Owner decision
+
+The existing BladeDash Media / Media Center presentation is retained and **must not be visually redesigned**.
+
+CCLOS Watch TV/media functionality is connected underneath it.
+
+Canonical path:
+
+```text
+Existing Blade Media Center XUI
+        |
+BladeMediaAdapter
+        |
+Shared/ported CCLOS Watch TV and media services
+```
+
+Rules:
+
+- preserve existing Blade media scenes, geometry, list controls, transitions, fonts and navigation style;
+- do not import the CCLOS Watch TV UI;
+- do not replace the Blade Media Center with a modern media screen;
+- Watch TV data/actions may populate/extend existing Blade media list/control patterns;
+- if a visible `Watch TV` entry is needed, use the existing Blade menu/list style without new chrome/layout geometry;
+- backend/playback capability may evolve independently behind the adapter.
+
+## Gate H
+
+At least one Watch TV/media flow works through the existing Blade Media presentation without visible CCLOS UI leakage.
+
+---
+
+# 11. Phase I — Marketplace, downloads and production service
+
+Authoritative production domain:
+
+```text
+consolecratelive.online
+```
+
+Do not resurrect deprecated NAS-hosted or Cloudflare-based CCLOS infrastructure because old source contains stale endpoints.
+
+Create a `BladeMarketplaceAdapter` and related download adapters.
 
 Reuse proven backend logic for:
 
-- production server/API access;
 - catalog retrieval;
 - artwork retrieval/cache;
-- download queue;
-- high-throughput download pipeline where available;
+- queue management;
+- high-throughput download pipeline;
 - segmented/single-file semantics;
-- install/extract flow where applicable;
-- status/error reporting.
+- install/extract flows where applicable;
+- Blade-style status/error mapping.
 
-Do not change the Blade frontend to resemble CCLOS.
+Visible name remains **Marketplace**.
 
-If a required Marketplace state is genuinely absent from BladeDash, document the gap and consult Retail 6770 only for that missing state.
+Do not create a new ConsoleCrate top-level Blade or expose API/server terminology.
 
-## Gate G
+## Gate I
 
-A Marketplace item can be displayed, selected, and downloaded from ConsoleCrate infrastructure through the Blade presentation contract.
+A Marketplace item can be displayed, selected and downloaded through the Blade presentation contract using ConsoleCrate production infrastructure.
 
 ---
 
-# 9. Phase H — remaining host services
+# 12. Phase J — remaining host services
 
-Implement in batches:
+Continue mapping retained Blade features to real services in batches.
 
-- achievements;
-- profile/gamercard;
-- storage/system info;
+Candidates include:
+
+- profiles/avatar;
+- storage/system/network;
 - file/path manager;
-- Title Updates;
 - saved games;
-- media/video/music retained by scope;
-- weather if retained/functional;
-- trainer scene if retained;
-- HTTP/WebUI if intentionally retained;
-- updater/settings flows.
+- HTTP/WebUI where a real standalone service is intentionally retained;
+- weather only if a real replacement is available/approved;
+- legacy Xlink Kai/JQE/plugin/update functions only if a real replacement is available/approved.
 
-For each service, retain the existing scene when technically usable and satisfy its host contract.
-
-Only create replacement presentation for a documented BladeDash gap or technical incompatibility.
+Do not interpret a missing obsolete service as permission to delete/redesign unrelated Blade presentation.
 
 ---
 
-# 10. Reuse of previous from-scratch work
+# 13. Performance
 
-Audit existing attempts before deletion.
-
-Keep reusable work such as:
-
-- XEX project/build foundation;
-- XDK discovery/build scripts;
-- HTTP/client services;
-- filesystem utilities;
-- launch helpers;
-- ConsoleCrate adapters;
-- parsing/cache logic;
-- tests;
-- diagnostics;
-- performance/background-task infrastructure.
-
-Discard/quarantine UI that competes with the approved BladeDash presentation unless it solves a proven missing state.
-
-Document in:
-
-```text
-docs/LEGACY_ATTEMPT_AUDIT.md
-```
-
----
-
-# 11. Fidelity validation
-
-For BladeDash-defined states, the primary migration comparison is:
-
-```text
-Developer-tested BladeDash(2005) under its known-good host
-                         vs
-Standalone BladeDashboard.xex using the migrated presentation
-```
-
-The standalone host must not alter:
-
-- geometry;
-- colors/effects;
-- typography placement;
-- animations;
-- focus behavior;
-- navigation;
-- transition timing;
-- audio-event timing;
-- visible menu hierarchy except intentional dynamic data.
-
-Retail 6770 is supplemental only for genuine BladeDash gaps and cannot overrule an approved BladeDash-defined state.
-
----
-
-# 12. Performance
-
-Do not put network/catalog/filesystem/download work on the render/input thread.
+Do not put network/catalog/scanning/download/filesystem work on the render/input thread.
 
 Use background/asynchronous architecture while preserving BladeDash loading/progress presentation.
 
-Reuse proven ConsoleCrate/CCLOS patterns for buffered downloads, catalog/artwork processing, library scans, events, and cached presentation models.
+Reuse proven ConsoleCrate/CCLOS patterns for buffered downloads, catalog/artwork processing, library scans, events and cached presentation models.
 
 ---
 
-# 13. Testing cadence
+# 14. Testing cadence
 
 Batch target-console testing at meaningful gates:
 
 1. existing BladeDash resource rendered by standalone host;
 2. main Blade shell/navigation;
 3. installed-game list + launch;
-4. Marketplace catalog + download;
-5. system/profile/settings service group;
-6. final migration regression/fidelity pass.
+4. Disc-to-GOD/CopyDVD path;
+5. Achievements/TU/Trainers service group;
+6. Marketplace catalog + downloads;
+7. Media Center + Watch TV;
+8. system/profile/settings group;
+9. final migration regression/fidelity pass.
 
 Continue compile/static/resource validation between hardware gates.
 
 ---
 
-# 14. Definition of milestone complete
+# 15. Release/redistribution boundary
+
+Until asset redistribution is explicitly reviewed, raw BladeDash assets are developer/private-build material.
+
+Do not automatically publish the owner-supplied ZIP, fonts, audio, textures or other third-party/historical resources whose redistribution status is not established.
+
+Public Git may contain newly written runtime code, adapters, build scripts, documentation, manifests/hashes, compatibility/provenance records and approved redistributable resources.
+
+---
+
+# 16. Definition of milestone complete
 
 Milestone 000 is complete when:
 
 - exact approved ZIP verified/preserved;
 - package proven usable in local XUI workflow;
+- external/editable presentation packaging strategy documented;
+- previous attempt audited;
+- exact CCLOS source commit provenance recorded;
 - FSD dependencies documented in a compatibility matrix;
-- standalone XEX loads the approved Blade presentation without FSD/Aurora;
+- standalone `default.xex` loads the approved Blade presentation without FSD/Aurora;
 - main Blade navigation works using supplied resources;
-- at least one installed title is populated and launchable;
-- ConsoleCrate backend integration is demonstrated through Blade presentation or exact blocker documented;
+- at least one installed title appears and launches;
+- at least one owner-approved feature is proven through a CCLOS-backed adapter (for example CopyDVD -> Disc-to-GOD, TU, Achievements or Trainers);
+- ConsoleCrate Marketplace/download integration is demonstrated or exact blocker documented;
+- Watch TV/media capability is demonstrated through the existing Blade Media UI or exact blocker documented;
 - incorrect from-scratch UI is removed/quarantined while reusable backend work is preserved;
 - migration comparison shows the new host did not visually or behaviorally reinvent BladeDash.
 
 ## Final Codex instruction
 
-**BladeDash(2005) is the frontend authority. Do not rebuild it. Transpose it onto a standalone host, replace the missing FSD runtime with clean adapters/services, and use Retail 6770 only to fill genuine gaps.**
+**BladeDash(2005) is the frontend authority. Preserve it. Keep every practical Blade feature by replacing its FSD backend with real ConsoleCrate/CCLOS Core or Xbox functionality. Keep the existing Blade Media Center UI intact while adding Watch TV underneath it. Use Retail 6770 only to fill genuine gaps.**
