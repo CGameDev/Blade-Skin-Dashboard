@@ -6,6 +6,14 @@
 
 This milestone supersedes the previous from-scratch UI construction strategy.
 
+Current checkpoint: **Phase F / Gate F and the Phase G installed-game
+list/loose-title launch Gate 3 are functionally passed on 2026-09-02. Revision
+5 discovered 12 launchables, rendered and navigated five emulator plus seven
+homebrew rows, maintained the localized counters, returned to the main shell,
+and launched SNES after orderly Blade shutdown. The game-list command chrome
+still exposes six Portuguese labels, so English localization completion and
+matched visual/interaction fidelity remain open.**
+
 Codex must complete this milestone before any new Blade UI reconstruction work.
 
 ## Objective
@@ -359,6 +367,32 @@ If an original external FSD-era service is obsolete and no real replacement exis
 - use an existing Blade disabled/unavailable state when available;
 - otherwise record `OWNER_DECISION_REQUIRED` before creating new visible behavior;
 - never leave a dead service call.
+
+### Current gate-3 implementation slice
+
+The approved `main.xur` category controls target an absent FSD-hosted
+`xbox360.xur`. The standalone compatibility layer now intercepts those exact
+IDs and navigates to the supplied, unchanged `gamelist.xur`. `GamesList` binds
+installed loose-title folder names through `BladeGameLibraryAdapter`; bounded
+filesystem discovery runs on `BackgroundQueue`; and A / `Jogar` queues the
+selected `default.xex` or Xbox Classic `default.xbe` through `LaunchService`
+for dispatch after clean shutdown.
+
+Revision 3 hardware proved all five supplied category menus open and navigate;
+one category's `1 de 5` counter proved five entries reached the list. Its row
+labels were blank because the skin's explicit `ConsoleFont` presenters lacked
+the typeface registration supplied by the original Freestyle host. Revision 4
+proved the exact system font cannot replace the global default in this
+standalone host and recorded `item_data=0`; it also discovered 13 launchable
+entries while the opened Xbox 360 category contained zero. Revision 5 restores
+the proven Arial default, aliases `ConsoleFont`, accepts the observed callback,
+and applies owner-requested English labels at runtime without modifying
+approved XURs. Its hardware run rendered five emulator and seven homebrew rows,
+navigated both lists with correct counters, returned through B, and launched
+SNES after clean shutdown. Gate 3 is functionally passed. Six command labels
+remain Portuguese and must be corrected before localization approval.
+Metadata, artwork, alternate list layouts, favorites, sorting, XBLA containers,
+and the remaining `GameControls.xur` actions stay open and are not faked.
 
 ---
 

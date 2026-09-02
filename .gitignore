@@ -1,8 +1,8 @@
 # Local Xbox 360/XDK build outputs
-build/
-Build/
-Debug/
-Release/
+/build/
+/Build/
+/Debug/
+/Release/
 *.obj
 *.pdb
 *.ilk
@@ -21,6 +21,7 @@ Release/
 # Developer-local proprietary/reference material
 references/local/
 FidelityCaptures/6770/original/
+/captures/
 local-sdk/
 xdk/
 XDK/

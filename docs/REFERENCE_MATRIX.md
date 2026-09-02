@@ -68,13 +68,13 @@ Codex must replace initial resource guesses with exact scene/control paths and c
 
 | ID | Area | BladeDash state/feature | Frontend authority | Standalone direction |
 |---|---|---|---|---|
-| ROOT-001 | Root | Main dashboard shell | BLADEDASH_DEFINED | Reuse `main.xur`/corresponding XUI; standalone host owns lifecycle/navigation. |
+| ROOT-001 | Root | Main dashboard shell | BLADEDASH_DEFINED | Approved `main.xur` root is `MainScene`; nested `ScnMain` host has five tabs/authored default tab 3. Gate F passed on console: the scene presented and zero-based runtime indices 0–4 were navigable. Matched visual captures remain pending. |
 | ROOT-002 | Root | Splash/loading presentation | BLADEDASH_DEFINED | Reuse existing splash/loading resources and timing. No CCLOS OOBE. |
-| BLADE-001 | Navigation | Horizontal Blade navigation | BLADEDASH_DEFINED | Preserve timelines/focus behavior; replace FSD host events only. |
+| BLADE-001 | Navigation | Horizontal Blade navigation | BLADEDASH_DEFINED | Gate F proves basic five-Blade navigation on the standalone host. Preserve authored timelines/focus behavior; exact input/transition matching and capture comparison remain open. |
 | BLADE-002 | Navigation | Active/inactive blade geometry | BLADEDASH_DEFINED | Use existing geometry; do not redraw from Retail screenshots. |
-| GAME-001 | Games | Game list/browse | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | `GamesList` -> Blade library adapter -> CCLOS/ConsoleCrate game discovery. |
+| GAME-001 | Games | Game list/browse | BLADEDASH_PARTIAL + CONSOLECRATE_BACKED | Approved `gamelist.xur` contract extracted. Exact main category controls target missing FSD-hosted `xbox360.xur`; standalone compatibility redirects them to supplied `gamelist.xur`. R5 hardware discovered 12 launchables and visibly rendered/navigated five emulator plus seven homebrew rows with correct counters; empty Xbox 360/XBLA/Xbox Classic categories matched the configured loose-root results. Six command labels remain Portuguese. Artwork/metadata/alternate layouts and comparison evidence remain open. |
 | GAME-002 | Games | Game detail/info | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing `gameinfo` presentation -> metadata/cache/launch adapters. |
-| GAME-003 | Games | Game controls/actions | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing controls -> standalone/CCLOS launch and action services. |
+| GAME-003 | Games | Game controls/actions | BLADEDASH_PARTIAL + CONSOLECRATE_BACKED | `GameControls.xur` control/class contract extracted. Gate 3 functionally proves the supplied A launch action queues SNES, performs clean standalone shutdown, and dispatches the image; screenshots, achievements, saves, TUs, trainers, artwork, move/delete/rename remain separately gated. |
 | ACH-001 | Achievements | Achievements UI | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing Achievements UI -> BladeAchievementAdapter -> CCLOS/Xbox achievement service. |
 | TU-001 | Title Updates | Title Update manager | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing TU UI -> BladeTitleUpdateAdapter -> CCLOS Title Update service. |
 | TRAIN-001 | Trainers | Trainer scene | BLADEDASH_DEFINED + CONSOLECRATE_BACKED | Existing Trainers UI -> BladeTrainerAdapter -> CCLOS trainer/runtime handling. |

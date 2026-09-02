@@ -136,3 +136,44 @@ The project may commit newly written runtime code, adapters, manifests/hashes, c
 ## Status
 
 **Canonical direction:** preserve the approved BladeDash frontend, keep its practical features, replace the FSD host beneath it, and connect proven ConsoleCrate/CCLOS services through clean adapters. Retail 6770 fills only genuine frontend gaps.
+
+**Milestone 000:** started 2026-09-01. Gate A is complete; approved XUI/XUR
+editability and source compilation are locally validated; the retired
+from-scratch attempt is quarantined; CCLOS provenance is recorded; and the
+initial FSD compatibility map is in progress. Console revision 3 proved the
+approved skin and splash XURs load and stay active, but its basic XUI host
+rendered black. Revision 4 then proved `InitEx` cannot be used without a caller-
+supplied device. Revision 5 visibly rendered the approved splash and exposed a
+1080p view-scaling defect. Revision 6 applies the installed XDK's documented
+1280x720-to-backbuffer transform and renders the approved splash full-frame on
+hardware. The revision 6 log and settings evidence prove two resource-complete
+runs, effects presentation, clean Back exits and boot persistence. Gate E passed
+on 2026-09-01. Phase F then extracted the approved `main.xur` root/tab/class
+contract and produced the first private main-shell console-test package. Its
+2026-09-02 hardware run loaded and presented the approved main scene, navigated
+all five runtime tab indices (`0` through `4`), handled Back, and shut down
+cleanly with no logged failure. Gate F is functionally passed. Matched per-Blade
+captures and F0/F1 comparison work remain required before visual-fidelity
+approval. Phase G has now extracted the supplied game-list/control contracts
+and implemented background loose-title discovery plus clean selected-title
+launch. Revision 2 hardware proved its evidence-scoped A-button fallback, then
+identified `XUI_ERR_CAST_FAILED` at supplied `gamelist.xur` creation and zero
+standalone storage aliases. Revision 3 corrects the observed `ScnGameView`
+`XuiTabScene` base, mounts the standard Xbox HDD/USB aliases before scanning,
+and was then proven on hardware: all five category menus opened, with one list
+showing five selectable rows. Those row labels were blank because the supplied
+presenters explicitly require the original Freestyle `ConsoleFont` host
+registration. Revision 4 proved that using the system font as the standalone
+global default removes all rendered text; its log nevertheless discovered 13
+launchable entries, showed zero in the specifically opened Xbox 360 category,
+and exposed an `item_data=0` source request. Revision 5 restores the proven
+Arial default, aliases `ConsoleFont`, accepts that observed callback, applies
+the owner-requested English runtime labels, and logs category totals plus
+discovered paths. Its 2026-09-02 hardware run discovered 12 loose launchables,
+rendered and navigated five emulator plus seven homebrew rows with correct
+counters, returned to the main shell, and launched SNES after orderly Blade
+shutdown. Gate 3 is functionally passed. Six game-list commands remain in
+Portuguese (`Opções`, `Favoritos`, `Voltar`, `Jogar`, `Menu Favoritos`, and
+`Ordenar`), and matched fidelity comparison remains open. See
+`docs/MILESTONE_000_CHECKPOINT.md`, `docs/PHASE_G_GAME_LIBRARY_CONTRACT.md`, and
+`docs/PHASE_G_CONSOLE_TEST_PLAN.md`.

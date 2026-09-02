@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{13174079-F65B-44CC-8440-EBF8A92A8D5D}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{98FE478D-C5E8-4329-BDF1-CDB4837D9D75}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\adapters\BladeGameLibraryAdapter.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\app\BladeDashboardApp.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\app\Main.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\compatibility\GameLibraryCompatibility.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\compatibility\MainSceneCompatibility.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\compatibility\ScnSplashScreen.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\compatibility\ScnTabPresenter.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\core\BackgroundQueue.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\diagnostics\DebugLog.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\models\InstalledGame.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\navigation\NavigationState.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\platform\ControllerInput.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\platform\LaunchService.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\platform\SettingsStore.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\platform\StorageAliasService.cpp"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="src\services\InstalledGameService.cpp"><Filter>Source Files</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\adapters\BladeGameLibraryAdapter.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\app\BladeDashboardApp.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\compatibility\GameLibraryCompatibility.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\compatibility\MainSceneCompatibility.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\compatibility\ScnSplashScreen.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\compatibility\ScnTabPresenter.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\core\BackgroundQueue.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\diagnostics\DebugLog.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\models\InstalledGame.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\navigation\NavigationState.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\platform\ControllerInput.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\platform\LaunchService.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\platform\SettingsStore.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\platform\StorageAliasService.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\services\IRuntimeService.h"><Filter>Header Files</Filter></ClInclude>
+    <ClInclude Include="src\services\InstalledGameService.h"><Filter>Header Files</Filter></ClInclude>
+  </ItemGroup>
+</Project>

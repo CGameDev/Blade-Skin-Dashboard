@@ -1,0 +1,29 @@
+# Blade Dashboard installed loose-title scan roots.
+# Format: CATEGORY=device:\path
+# Supported categories: XBOX360, XBLA, XBOXCLASSIC, EMULATORS, HOMEBREW
+# Supported devices: Hdd, Hdd1, Usb0, Usb1, Usb2, game
+#
+# The next hardware gate supports loose default.xex/default.xbe images only.
+# Container-only XBLA content is intentionally not presented as launchable.
+
+XBOX360=Hdd1:\Games
+XBOX360=Usb0:\Games
+XBOX360=Usb1:\Games
+XBOX360=Usb2:\Games
+
+XBOXCLASSIC=Hdd1:\Games
+XBOXCLASSIC=Hdd1:\Xbox1
+XBOXCLASSIC=Usb0:\Games
+XBOXCLASSIC=Usb1:\Games
+XBOXCLASSIC=Usb2:\Games
+
+EMULATORS=Hdd1:\Emulators
+EMULATORS=Hdd1:\Emulator
+EMULATORS=Usb0:\Emulators
+EMULATORS=Usb1:\Emulators
+EMULATORS=Usb2:\Emulators
+
+HOMEBREW=Hdd1:\Apps
+HOMEBREW=Usb0:\Apps
+HOMEBREW=Usb1:\Apps
+HOMEBREW=Usb2:\Apps
